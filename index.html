@@ -1,0 +1,2062 @@
+<!-- GYM LOG v1.95 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>GYM LOG</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  button{-webkit-appearance:none;-webkit-border-radius:12px}
+  body{background:#0a0a0f;color:#e8e6f0;font-family:'SF Pro Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15px;min-height:100vh;overflow-x:hidden}
+  :root{--accent:#1D4ED8;--surface:#141420;--surface2:#1c1c2e;--surface3:#252538;--border:#2e2e45;--text:#e8e6f0;--muted:#8884a0;--red:#ff5f7e;--blue:#5b9fff}
+  input,textarea{background:var(--surface3);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-size:15px;padding:12px 16px;width:100%;outline:none;-webkit-appearance:none}
+  input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,78,216,.12)}
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+  button{cursor:pointer;font-family:inherit;font-size:15px;border:none;border-radius:12px;padding:14px 20px;transition:transform .1s,opacity .1s}
+  button{-webkit-appearance:none}
+  button:active{transform:scale(.97);opacity:.9;border-radius:12px;-webkit-border-radius:12px}
+  .btn-primary{background:var(--accent);color:#ffffff;font-weight:700;width:100%}
+  .btn-ghost{background:var(--surface3);color:var(--text);border:1.5px solid var(--border)}
+  .btn-danger{background:#a93226;color:#ffffff;border:1.5px solid #a93226}
+  .btn-danger-soft{background:#e67e22;color:#ffffff;border:1.5px solid #e67e22}
+  .btn-blue{background:rgba(91,159,255,.15);color:var(--blue);border:1.5px solid rgba(91,159,255,.3);width:100%}
+  .tab-bar{display:flex;gap:3px;background:var(--surface);padding:4px;border-radius:16px;margin-bottom:20px}
+  .tab{flex:1;padding:9px 4px;border-radius:12px;background:transparent;color:var(--muted);font-size:11px;font-weight:600;text-align:center;line-height:1.3}
+  .tab.active{background:var(--surface3);color:var(--text)}
+  .card{background:var(--surface2);border:1.5px solid var(--border);border-radius:18px;padding:18px}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(29,78,216,.12);color:var(--accent);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600}
+  .chip.blue{background:rgba(91,159,255,.12);color:var(--blue)}
+  .label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+  .exercise-block{background:var(--surface3);border-radius:0 14px 14px 0;padding:14px;margin-bottom:0;border:1.5px solid transparent}
+  .set-row{display:grid;grid-template-columns:22px 1fr 1fr auto;align-items:center;gap:6px;padding:7px 8px;background:var(--surface);border-radius:10px;margin-bottom:6px}
+  .set-num{font-size:13px;font-weight:700;color:var(--muted);text-align:center}
+  .set-input{background:var(--surface2);border:1.5px solid var(--border);border-radius:9px;color:var(--text);font-size:14px;font-weight:600;padding:8px 6px;outline:none;width:100%;text-align:center}
+  .set-input:focus{border-color:var(--accent)}
+  .set-label{font-size:10px;color:var(--muted);text-align:center;margin-top:3px;letter-spacing:.5px;font-weight:600;text-transform:uppercase}
+  .mode-toggle{display:flex;background:var(--surface);border-radius:10px;padding:3px;gap:3px;margin-bottom:12px}
+  .mode-btn{flex:1;padding:7px 6px;border-radius:8px;background:transparent;color:var(--muted);font-size:12px;font-weight:600;text-align:center;border:none;cursor:pointer}
+  .mode-btn.active{background:var(--surface3);color:var(--accent)}
+  .icon-btn{background:transparent;color:var(--muted);padding:6px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+  .history-prev{font-size:12px;color:var(--muted);margin-top:2px;margin-bottom:10px}
+  .pr-badge{color:var(--accent);font-size:11px;font-weight:700;margin-left:4px}
+  .back-btn{display:flex;align-items:center;gap:6px;background:transparent;color:var(--muted);font-size:14px;font-weight:600;padding:8px 0;margin-bottom:16px}
+  .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .empty{text-align:center;padding:40px 20px;color:var(--muted)}
+  .empty i{font-size:48px;display:block;margin-bottom:12px;opacity:.4}
+  h2{font-size:22px;font-weight:800;margin-bottom:4px}
+  h3{font-size:17px;font-weight:700;margin-bottom:2px}
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .ex-pill{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--surface3);border-radius:12px;margin-bottom:8px;cursor:pointer;border:1.5px solid transparent}
+  .ex-pill.active-ex{border-color:var(--accent);background:rgba(29,78,216,.06)}
+  .metric-toggle{display:flex;gap:4px;background:var(--surface);padding:3px;border-radius:10px;margin-bottom:16px}
+  .metric-btn{flex:1;padding:7px 8px;border-radius:8px;background:transparent;color:var(--muted);font-size:12px;font-weight:600;text-align:center;border:none;cursor:pointer}
+  .metric-btn.active{background:var(--surface3);color:var(--accent)}
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stat-box{background:var(--surface3);border-radius:12px;padding:12px 14px}
+  .stat-val{font-size:20px;font-weight:800;color:var(--accent)}
+  .stat-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-top:2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .filter-select{background:var(--surface3);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;font-weight:600;padding:8px 12px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238884a0' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ── IndexedDB layer ───────────────────────────────────────────────────────────
+// One database "gymlog", two object stores: "templates" and "workouts".
+// Each store holds a single record with key "data" — a JSON-serialised array.
+// This keeps the API surface identical to what the app used before.
+
+const DB_NAME = 'gymlog';
+const DB_VERSION = 1;
+const STORES = ['templates', 'workouts'];
+
+let _db = null;
+
+function openDB() {
+  if (_db) return Promise.resolve(_db);
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+
+    // Called only on first open or version upgrade — creates the stores
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      STORES.forEach(name => {
+        if (!db.objectStoreNames.contains(name)) {
+          db.createObjectStore(name); // key-value store, we use string keys
+        }
+      });
+    };
+
+    req.onsuccess = e => { _db = e.target.result; resolve(_db); };
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+// Load array from a store (returns [] if nothing saved yet)
+async function dbLoad(storeName) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx  = db.transaction(storeName, 'readonly');
+    const req = tx.objectStore(storeName).get('data');
+    req.onsuccess = e => resolve(e.target.result ?? []);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+// Persist array to a store
+async function dbSave(storeName, data) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx  = db.transaction(storeName, 'readwrite');
+    const req = tx.objectStore(storeName).put(data, 'data');
+    req.onsuccess = () => resolve();
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmtDate(iso)  { return new Date(iso).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function fmtTime(iso)  { return new Date(iso).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}); }
+function fmtShort(iso) { return new Date(iso).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}); }
+const WORKOUT_COLORS = [
+  { id:'none',  label:'None',   hex:null },
+  { id:'blue',  label:'Blue',   hex:'#5b9fff' },
+  { id:'white', label:'White',  hex:'#ffffff' },
+  { id:'red',   label:'Red',    hex:'#ff5f7e' },
+  { id:'yellow',label:'Green',  hex:'#39D353' },
+  { id:'purple',label:'Purple', hex:'#7C3AED' },
+  { id:'orange',label:'Gray',   hex:'#9CA3AF' },
+];
+function colorHex(id) { return WORKOUT_COLORS.find(c=>c.id===id)?.hex || null; }
+
+function toSentenceCase(str) {
+  if(!str||!str.trim()) return str;
+  const s = str.trim().toLowerCase();
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function getLastExHistory(workouts, exName, limit=2) {
+  const results = [];
+  for (let i = workouts.length - 1; i >= 0 && results.length < limit; i--) {
+    const ex = workouts[i].exercises.find(e => e.name.toLowerCase() === exName.toLowerCase());
+    if (ex) results.push({ ex, date: workouts[i].date });
+  }
+  return results; // [{ex, date}, ...] newest first
+}
+
+function makeSets(n, mode) {
+  return mode === 'cardio'
+    ? Array.from({length:n}, () => ({work:'', rest:''}))
+    : Array.from({length:n}, () => ({reps:'', weight:''}));
+}
+
+function epley(w, r)    { return (parseFloat(w)||0) * (1 + (parseFloat(r)||0) / 30); }
+function best1RM(sets)   { return Math.max(...sets.map(s => epley(s.weight, s.reps))); }
+function totalVol(sets)  { return sets.reduce((a,s) => a + (parseFloat(s.weight)||0)*(parseFloat(s.reps)||0), 0); }
+function bestSetVol(sets){ return Math.max(...sets.map(s => (parseFloat(s.weight)||0)*(parseFloat(s.reps)||0))); }
+
+
+// ── ColorPicker ───────────────────────────────────────────────────────────────
+function ColorPicker({ value, onChange }) {
+  return (
+    <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}>
+      {WORKOUT_COLORS.map(c => (
+        <div key={c.id} onClick={()=>onChange(c.id)}
+          style={{
+            width:26, height:26, borderRadius:'50%', cursor:'pointer',
+            background: c.hex || 'var(--surface3)',
+            border: value===c.id
+              ? `3px solid var(--text)`
+              : c.hex ? '3px solid transparent' : '2px dashed var(--border)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            transition:'transform .1s',
+          }}>
+          {!c.hex && <i className="ti ti-x" style={{fontSize:11,color:'var(--muted)'}}></i>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+// ── ExerciseNameInput ─────────────────────────────────────────────────────────
+function ExerciseNameInput({ value, onChange, workouts, templates }) {
+  const [focused, setFocused] = useState(false);
+  const [query,   setQuery]   = useState(value);
+  const wrapRef = React.useRef(null);
+
+  // Sync query when value changes externally
+  useEffect(() => { setQuery(value); }, [value]);
+
+  // Collect all unique exercise names from history + templates
+  const allNames = React.useMemo(() => {
+    const names = new Set();
+    workouts.forEach(w => w.exercises.forEach(ex => { if(ex.name) names.add(toSentenceCase(ex.name)); }));
+    templates.forEach(t => t.exercises.forEach(n => { if(n) names.add(toSentenceCase(n)); }));
+    return [...names].sort();
+  }, [workouts, templates]);
+
+  const suggestions = query.trim().length > 0
+    ? allNames.filter(n => n.toLowerCase().startsWith(query.trim().toLowerCase()) && n.toLowerCase() !== query.trim().toLowerCase())
+    : [];
+
+  const select = (name) => {
+    setQuery(name);
+    onChange(name);
+    setFocused(false);
+  };
+
+  const clear = () => {
+    setQuery('');
+    onChange('');
+  };
+
+  return (
+    <div ref={wrapRef} style={{flex:1,position:'relative'}}>
+      <div style={{display:'flex',alignItems:'center',background:'var(--surface3)',border:'1.5px solid var(--border)',borderRadius:12,overflow:'visible'}}>
+        <input
+          value={query}
+          onChange={e => { setQuery(e.target.value); onChange(e.target.value); }}
+          onFocus={() => setFocused(true)}
+          onBlur={e => { setTimeout(() => setFocused(false), 150); onChange(toSentenceCase(e.target.value)); }}
+          style={{flex:1,background:'transparent',border:'none',color:'var(--text)',fontSize:14,padding:'8px 12px',outline:'none'}}
+          placeholder="Exercise name"
+        />
+        {query.length > 0 && (
+          <button onClick={clear} style={{background:'transparent',color:'var(--muted)',padding:'6px 10px',fontSize:16,display:'flex',alignItems:'center'}}>
+            <i className="ti ti-x" style={{fontSize:15}}></i>
+          </button>
+        )}
+      </div>
+      {focused && suggestions.length > 0 && (
+        <div style={{position:'absolute',top:'calc(100% + 4px)',left:0,right:0,background:'var(--surface2)',border:'1.5px solid var(--border)',borderRadius:12,zIndex:100,overflow:'hidden',boxShadow:'0 8px 24px rgba(0,0,0,0.4)'}}>
+          {suggestions.slice(0, 5).map((s, i) => (
+            <div key={i} onMouseDown={() => select(s)} onClick={() => select(s)}
+              style={{padding:'11px 14px',fontSize:14,fontWeight:600,cursor:'pointer',borderBottom: i < Math.min(suggestions.length,5)-1 ? '1px solid var(--border)' : 'none',display:'flex',alignItems:'center',gap:8}}>
+              <i className="ti ti-history" style={{fontSize:13,color:'var(--muted)'}}></i>
+              {s}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── ExerciseEditor ────────────────────────────────────────────────────────────
+function ExerciseEditor({ ex, idx, workouts, templates, onUpdate, onRemove, onDone, collapsed: collapsedProp, onToggleCollapse }) {
+  const [localCollapsed, setLocalCollapsed] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const collapsed = onToggleCollapse ? collapsedProp : localCollapsed;
+  const toggleCollapse = onToggleCollapse ? onToggleCollapse : () => setLocalCollapsed(v=>!v);
+  const lastHistory = getLastExHistory(workouts, ex.name, 2);
+  const last = lastHistory[0]?.ex || null;
+  const mode = ex.mode || 'strength';
+
+  const setMode   = m  => onUpdate(idx, {...ex, mode:m, sets:makeSets(ex.sets.length, m), done:false});
+  const updateSet = (si, field, val) => { const sets = ex.sets.map((s,i) => i===si ? {...s,[field]:val} : s); onUpdate(idx,{...ex,sets}); };
+  const addSet    = ()  => onUpdate(idx, {...ex, sets:[...ex.sets, mode==='cardio'?{work:'',rest:''}:{reps:'',weight:''}]});
+  const removeSet = si  => { if(ex.sets.length<=1)return; onUpdate(idx,{...ex,sets:ex.sets.filter((_,i)=>i!==si)}); };
+
+  const isWeightPR = mode==='strength' && last && last.mode!=='cardio' && (()=>{
+    const bl = Math.max(...(last.sets||[]).map(s=>parseFloat(s.weight)||0));
+    const bn = Math.max(...ex.sets.map(s=>parseFloat(s.weight)||0));
+    return bn>0 && bn>bl;
+  })();
+  const isRepPR = mode==='strength' && !isWeightPR && last && last.mode!=='cardio' && (()=>{
+    // For each current set, check if same weight existed last time with fewer reps
+    return ex.sets.some(curr => {
+      const cw = parseFloat(curr.weight)||0;
+      const cr = parseFloat(curr.reps)||0;
+      if(cw===0 || cr===0) return false;
+      return (last.sets||[]).some(prev => {
+        const pw = parseFloat(prev.weight)||0;
+        const pr = parseFloat(prev.reps)||0;
+        return pw===cw && cr>pr;
+      });
+    });
+  })();
+
+  const c1l = mode==='cardio' ? 'Work time'   : 'Reps';
+  const c2l = mode==='cardio' ? 'Rest time'   : 'Weight (kg)';
+  const c1f = mode==='cardio' ? 'work'        : 'reps';
+  const c2f = mode==='cardio' ? 'rest'        : 'weight';
+
+  return (
+    <div className={`exercise-block${ex.done?' done':''}`}>
+      {deleteConfirm && (
+        <ConfirmDialog
+          message="Are you sure you want to delete this exercise?"
+          onConfirm={()=>{ setDeleteConfirm(false); onRemove(idx); }}
+          onCancel={()=>setDeleteConfirm(false)}
+        />
+      )}
+      <div className="row" style={{marginBottom:8}}>
+        <ExerciseNameInput
+          value={ex.name}
+          onChange={name=>onUpdate(idx,{...ex,name})}
+          workouts={workouts}
+          templates={templates||[]}
+        />
+        <button className="icon-btn" onClick={toggleCollapse} style={{color:'var(--muted)'}}>
+          <i className={`ti ${collapsed?'ti-chevron-down':'ti-chevron-up'}`} style={{fontSize:18}}></i>
+        </button>
+      </div>
+
+      {!collapsed && <><div className="mode-toggle">
+        <button className={`mode-btn${mode==='strength'?' active':''}`} onClick={()=>setMode('strength')}><i className="ti ti-barbell" style={{fontSize:13,marginRight:4}}></i>Strength</button>
+        <button className={`mode-btn${mode==='cardio'?' active':''}`}   onClick={()=>setMode('cardio')}><i className="ti ti-bike" style={{fontSize:13,marginRight:4}}></i>Cardio / Time</button>
+      </div>
+
+      {lastHistory.length>0 && lastHistory[0].ex.mode===mode && (
+        <div className="history-prev">
+          {lastHistory.map((entry, hi) => (
+            <div key={hi} style={{marginBottom: hi<lastHistory.length-1?4:0}}>
+              <i className="ti ti-history" style={{fontSize:11,marginRight:4,opacity:.7}}></i>
+              <span style={{fontWeight:700,marginRight:4}}>{hi===0?'Last':'2 sessions ago'}:</span>
+              {(entry.ex.sets||[]).map(s => mode==='cardio' ? `${s.work||'—'}/${s.rest||'—'}` : `${s.weight||0}kg×${s.reps||'?'}`).join(', ')}
+              {hi===0 && isWeightPR && <span className="pr-badge">↑ Weight PR!</span>}
+              {hi===0 && isRepPR && <span className="pr-badge" style={{color:'var(--blue)',marginLeft:4}}>↑ Rep PR!</span>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {mode==='strength' && <div style={{fontSize:11,color:'var(--muted)',textAlign:'center',marginBottom:6,opacity:.7}}>
+        <i className="ti ti-info-circle" style={{fontSize:11,marginRight:3}}></i>Use <strong>.</strong> for decimals, <strong>only applies</strong> for weight (e.g. 12.5).<br/>
+        <strong>WEIGHT</strong> — leave empty for body weight (BW)
+      </div>}
+      <div style={{display:'grid',gridTemplateColumns:'22px 1fr 1fr 28px',gap:6,padding:'0 8px',marginBottom:4}}>
+        <div/>
+        <div style={{fontSize:10,color:'var(--muted)',textAlign:'center',fontWeight:600,textTransform:'uppercase',letterSpacing:.5,display:'flex',alignItems:'center',justifyContent:'center'}}>{c1l}</div>
+        <div style={{fontSize:10,color:'var(--muted)',textAlign:'center',fontWeight:600,textTransform:'uppercase',letterSpacing:.5,display:'flex',alignItems:'center',justifyContent:'center'}}>{c2l}</div>
+        <div/>
+      </div>
+
+      {ex.sets.map((s,si) => (
+        <div key={si} className="set-row">
+          <div className="set-num">{si+1}</div>
+          <input className="set-input"
+            type={mode==='strength'?'number':'text'} inputMode={mode==='strength'?'numeric':'text'}
+            min={mode==='strength'?1:undefined} value={s[c1f]??''}
+            placeholder={mode==='cardio'?'e.g. 2:00':''}
+            onChange={e=>{
+            if(mode==='strength') {
+              const v = e.target.value;
+              if(v==='') { updateSet(si,c1f,''); return; }
+              const floored = Math.floor(parseFloat(v));
+              if(!isNaN(floored) && floored>=1) updateSet(si,c1f, parseInt(floored));
+            } else updateSet(si,c1f,e.target.value);
+          }}
+          onFocus={e=>e.target.select()}
+          onBlur={e=>{ if(mode==='cardio' && e.target.value && !e.target.value.includes(':')) updateSet(si,c1f,e.target.value+':00'); }} />
+          <input className="set-input"
+            type="text" inputMode={mode==='strength'?'decimal':'text'}
+            value={s[c2f]??''} placeholder={mode==='cardio'?'e.g. 0:30':'0'}
+            onChange={e=>{
+              if(mode==='strength') {
+                let v = e.target.value.replace(',','.');
+                // Strip leading zeros (but allow e.g. '0.5')
+                if(v.length>1 && v.startsWith('0') && v[1]!=='.') v = v.replace(/^0+/,'');
+                updateSet(si,c2f,v);
+              } else updateSet(si,c2f,e.target.value);
+            }}
+            onFocus={e=>e.target.select()}
+            onBlur={e=>{
+              if(mode==='strength' && (e.target.value==='0'||e.target.value==='')) updateSet(si,c2f,'BW');
+              if(mode==='cardio' && e.target.value && !e.target.value.includes(':')) updateSet(si,c2f,e.target.value+':00');
+            }} />
+          <button className="icon-btn" onClick={()=>removeSet(si)} style={{opacity:ex.sets.length<=1?0.3:1}}><i className="ti ti-minus" style={{fontSize:16}}></i></button>
+        </div>
+      ))}
+
+      <div style={{marginTop:8}}>
+        <button className="btn-ghost" style={{width:'100%',padding:'10px',fontSize:13,display:'flex',alignItems:'center',gap:6,justifyContent:'center'}} onClick={addSet}>
+          <i className="ti ti-plus"></i> Add set
+        </button>
+      </div>
+      <textarea
+        value={ex.note||''}
+        onChange={e=>onUpdate(idx,{...ex,note:e.target.value})}
+        placeholder="Notes"
+        rows={1}
+        style={{marginTop:8,resize:'none',fontSize:13,padding:'10px 12px',lineHeight:1.4,
+          overflow:'hidden',minHeight:40,borderRadius:12,width:'100%',display:'block'}}
+        onInput={e=>{ e.target.style.height='auto'; e.target.style.height=e.target.scrollHeight+'px'; }}
+      />
+            <button onClick={()=>setDeleteConfirm(true)} style={{
+        width:'100%',marginTop:8,padding:'10px',fontSize:13,
+        background:'#a93226',color:'#ffffff',
+        border:'1.5px solid #a93226',borderRadius:12,
+        display:'flex',alignItems:'center',gap:6,justifyContent:'center',fontWeight:600
+      }}>
+        <i className="ti ti-trash" style={{fontSize:14}}></i> Delete exercise
+      </button>
+      </>
+      }
+      {collapsed && (
+        <div style={{display:'flex',flexWrap:'wrap',gap:6,marginTop:4}}>
+          {ex.sets.map((s,si)=>(
+            <span key={si} style={{fontSize:12,color:'var(--muted)',background:'var(--surface)',borderRadius:6,padding:'3px 8px'}}>
+              {(ex.mode||'strength')==='cardio' ? `${s.work||'—'}/${s.rest||'—'}` : `${s.weight||0}kg×${s.reps||'?'}`}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// ── DraggableExerciseList ─────────────────────────────────────────────────────
+function DraggableExerciseList({ exercises, onReorder, onRemove }) {
+  const [dragIdx,  setDragIdx]  = useState(null);
+  const [overIdx,  setOverIdx]  = useState(null);
+
+  const handleDragStart = (e, i) => {
+    setDragIdx(i);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(i));
+  };
+
+  const handleDragOver = (e, i) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if(i !== overIdx) setOverIdx(i);
+  };
+
+  const handleDrop = (e, i) => {
+    e.preventDefault();
+    const from = parseInt(e.dataTransfer.getData('text/plain'));
+    setDragIdx(null); setOverIdx(null);
+    if(from === i) return;
+    const reordered = [...exercises];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(i, 0, moved);
+    onReorder(reordered);
+  };
+
+  const handleDragEnd = () => { setDragIdx(null); setOverIdx(null); };
+
+  // Build display order with placeholder
+  const displayList = exercises.map((ex, i) => ({ ex, originalIdx: i }));
+
+  return (
+    <div className="card" style={{marginBottom:20}}>
+      {displayList.map(({ ex, originalIdx: i }) => {
+        const isDragging = dragIdx === i;
+        const isOver     = overIdx === i && dragIdx !== null && dragIdx !== i;
+        const insertBefore = isOver && dragIdx > i;
+        const insertAfter  = isOver && dragIdx < i;
+
+        return (
+          <div key={i}>
+            {insertBefore && (
+              <div style={{height:3,background:'var(--accent)',borderRadius:4,margin:'2px 0',opacity:.8}}></div>
+            )}
+            <div
+              draggable
+              onDragStart={e=>handleDragStart(e,i)}
+              onDragOver={e=>handleDragOver(e,i)}
+              onDrop={e=>handleDrop(e,i)}
+              onDragEnd={handleDragEnd}
+              style={{
+                display:'flex',alignItems:'center',justifyContent:'space-between',
+                padding:'8px 0',
+                borderBottom: i<exercises.length-1 && !insertAfter ? '1px solid var(--border)' : 'none',
+                cursor:'grab',userSelect:'none',
+                opacity: isDragging ? 0.35 : 1,
+                transition:'opacity .15s',
+              }}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <i className="ti ti-grip-vertical" style={{fontSize:16,color:'var(--muted)',flexShrink:0}}></i>
+                <span style={{fontWeight:600}}>{ex}</span>
+              </div>
+              <button style={{background:'transparent',color:'var(--red)',padding:'4px'}} onClick={()=>onRemove(i)}>
+                <i className="ti ti-trash" style={{fontSize:18}}></i>
+              </button>
+            </div>
+            {insertAfter && (
+              <div style={{height:3,background:'var(--accent)',borderRadius:4,margin:'2px 0',opacity:.8}}></div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── TemplatesTab ──────────────────────────────────────────────────────────────
+function TemplatesTab({ templates, setTemplates, onStartWorkout, tplState, setTplState }) {
+  const { creating, name, exInput, exercises, editing, origName, origExercises } = tplState;
+  const set = patch => setTplState(s=>({...s,...patch}));
+
+  const saveTemplate = async () => {
+    if(!name.trim()) { setTplSaveAttempted(true); return; }
+    const updated = editing!==null
+      ? templates.map((t,i)=>i===editing?{...t,name,exercises}:t)
+      : [...templates,{id:Date.now(),name,exercises}];
+    setTemplates(updated);
+    await dbSave('templates', updated);
+    set({creating:false,name:'',exInput:'',exercises:[],editing:null});
+  };
+
+  const deleteTemplate = async idx => {
+    const updated = templates.filter((_,i)=>i!==idx);
+    setTemplates(updated);
+    await dbSave('templates', updated);
+  };
+
+  const addEx    = () => { if(!exInput.trim())return; set({exercises:[...exercises,toSentenceCase(exInput)],exInput:''}); };
+  const startEdit = id => { const t = templates.find(t=>t.id===id); if(!t) return; const idx = templates.indexOf(t); set({editing:idx,name:t.name,exercises:[...t.exercises],creating:true,origName:t.name,origExercises:[...t.exercises]}); };
+
+
+
+  
+
+  const [tplSelecting,    setTplSelecting]    = useState(false);
+  const [tplSelected,     setTplSelected]     = useState(new Set());
+  const [tplConfirmMode,  setTplConfirmMode]  = useState(null);
+  const [tplDeleteConfirm,setTplDeleteConfirm] = useState(false);
+  const [tplDiscardConfirm, setTplDiscardConfirm] = useState(false);
+  const [tplDiscardChangesConfirm, setTplDiscardChangesConfirm] = useState(false);
+  const [tplSaveAttempted, setTplSaveAttempted] = useState(false);
+
+  const toggleTplSelect = id => {
+    if(!templates.some(t=>t.id===id)) return;
+    setTplSelected(prev => { const next=new Set(prev); next.has(id)?next.delete(id):next.add(id); return next; });
+  };
+  const exitTplSelect = () => { setTplSelecting(false); setTplSelected(new Set()); };
+
+  const doDeleteAllTpl = async () => {
+    setTemplates([]); await dbSave('templates', []);
+    setTplConfirmMode(null); exitTplSelect();
+  };
+  const doDeleteSelectedTpl = async () => {
+    const validSelected = new Set([...tplSelected].filter(id=>templates.some(t=>t.id===id)));
+    const updated = templates.filter(t => !validSelected.has(t.id));
+    setTemplates(updated); await dbSave('templates', updated);
+    setTplConfirmMode(null); exitTplSelect();
+  };
+
+if(creating) return (
+    <div>
+      <button className="back-btn" onClick={()=>set({creating:false,editing:null,name:'',exInput:'',exercises:[]})}><i className="ti ti-arrow-left"></i> Back</button>
+      <h2 style={{marginBottom:20}}>{editing!==null?'Edit template':'New template'}</h2>
+      <div className="label">Template name</div>
+      <input value={name} onChange={e=>set({name:e.target.value})} placeholder="e.g. Push Day" style={{marginBottom:18}} />
+      <div className="label">Add exercise</div>
+      <div className="row" style={{marginBottom:18}}>
+        <input value={exInput} onChange={e=>set({exInput:e.target.value})} placeholder="e.g. Bench Press" onKeyDown={e=>e.key==='Enter'&&addEx()} style={{flex:1}} />
+        <button className="btn-ghost" style={{width:'auto',padding:'12px 16px'}} onClick={addEx}><i className="ti ti-plus"></i></button>
+      </div>
+      {exercises.length>0 && (
+        <DraggableExerciseList exercises={exercises} onReorder={reordered=>set({exercises:reordered})} onRemove={i=>set({exercises:exercises.filter((_,j)=>j!==i)})} />
+      )}
+      {!name.trim() && tplSaveAttempted && (
+        <div style={{fontSize:12,color:'#e67e22',fontWeight:600,marginBottom:8,display:'flex',alignItems:'center',gap:6}}>
+          <i className="ti ti-alert-triangle" style={{fontSize:13}}></i> Please enter a template name before saving.
+        </div>
+      )}
+      <button className="btn-primary" onClick={saveTemplate}><i className="ti ti-check"></i> Save template</button>
+      {editing!==null && (
+        <>
+          {tplDiscardChangesConfirm && (
+            <ConfirmDialog
+              message="Discard changes to this template?"
+              onConfirm={()=>{ setTplDiscardChangesConfirm(false); set({creating:false,editing:null,name:'',exInput:'',exercises:[],origName:null,origExercises:null}); }}
+              onCancel={()=>setTplDiscardChangesConfirm(false)}
+            />
+          )}
+          <button className="btn-danger" style={{width:'100%',marginTop:10}} onClick={()=>setTplDiscardChangesConfirm(true)}>
+            <i className="ti ti-x"></i> Discard changes
+          </button>
+        </>
+      )}
+      {editing===null && (
+        <>
+          {tplDiscardConfirm && (
+            <ConfirmDialog
+              message="Discard this template?"
+              subMessage="All entered exercises will be lost."
+              onConfirm={()=>{ setTplDiscardConfirm(false); set({creating:false,editing:null,name:'',exInput:'',exercises:[]}); }}
+              onCancel={()=>setTplDiscardConfirm(false)}
+            />
+          )}
+          <button className="btn-danger" style={{width:'100%',marginTop:10}} onClick={()=>setTplDiscardConfirm(true)}>
+            <i className="ti ti-x"></i> Discard template
+          </button>
+        </>
+      )}
+      {editing!==null && (
+        <>
+          <button className="btn-ghost" style={{width:'100%',marginTop:10,display:'flex',alignItems:'center',gap:8,justifyContent:'center'}}
+            onClick={()=>{ set({name:'Copy of '+name, exercises:[...exercises], editing:null, creating:true}); }}>
+            <i className="ti ti-copy"></i> Copy to new template
+          </button>
+          {tplDeleteConfirm && (
+            <ConfirmDialog
+              message={`Delete template "${name}"?`}
+              onConfirm={async()=>{ await deleteTemplate(editing); setTplDeleteConfirm(false); set({creating:false,editing:null,name:'',exInput:'',exercises:[]}); }}
+              onCancel={()=>setTplDeleteConfirm(false)}
+            />
+          )}
+          <button className="btn-danger" style={{width:'100%',marginTop:10}} onClick={()=>setTplDeleteConfirm(true)}>
+            <i className="ti ti-trash"></i> Delete template
+          </button>
+        </>
+      )}
+    </div>
+  );
+
+  return (
+    <div>
+      {tplConfirmMode && (
+        <ConfirmDialog
+          message={tplConfirmMode==='all'
+            ? 'Are you sure you want to delete ALL templates?'
+            : `Are you sure you want to delete ${tplSelected.size} selected template${tplSelected.size!==1?'s':''}`}
+          onConfirm={tplConfirmMode==='all' ? doDeleteAllTpl : doDeleteSelectedTpl}
+          onCancel={()=>setTplConfirmMode(null)}
+        />
+      )}
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
+        <h2>Templates</h2>
+        <div style={{display:'flex',gap:8}}>
+          {!tplSelecting ? (
+            <>
+              {templates.length>0 &&
+                <button className="btn-ghost" style={{padding:'8px 14px',fontSize:13,display:'flex',alignItems:'center',gap:6}} onClick={()=>{ setTplSelected(new Set()); setTplSelecting(true); }}>
+                  <i className="ti ti-checks"></i> Select
+                </button>
+              }
+              <button className="btn-ghost" style={{padding:'10px 14px',fontSize:13,display:'flex',alignItems:'center',gap:6}} onClick={()=>set({creating:true})}><i className="ti ti-plus"></i> New</button>
+            </>
+          ) : (
+            <>
+              <button className="btn-danger" style={{padding:'8px 14px',fontSize:13,width:'auto',display:'flex',alignItems:'center',gap:6}} onClick={()=>setTplConfirmMode('all')}>
+                <i className="ti ti-trash"></i> All
+              </button>
+              {tplSelected.size>0 && (
+                <button className="btn-danger-soft" style={{padding:'8px 14px',fontSize:13,width:'auto',display:'flex',alignItems:'center',gap:6}} onClick={()=>setTplConfirmMode('selected')}>
+                  <i className="ti ti-trash"></i> Selected ({[...tplSelected].filter(id=>templates.some(t=>t.id===id)).length})
+                </button>
+              )}
+              <button className="btn-ghost" style={{padding:'8px 14px',fontSize:13}} onClick={exitTplSelect}>Cancel</button>
+            </>
+          )}
+        </div>
+      </div>
+      {templates.length===0
+        ? <div className="empty"><i className="ti ti-layout-cards"></i>No templates yet<br/><small style={{marginTop:8,display:'block'}}>Create your first workout template</small></div>
+        : [...templates].sort((a,b)=>b.id-a.id).map((t,idx)=>{
+          const tplId = t.id;
+          const isTplSelected = tplSelected.has(tplId);
+          return (
+            <div key={t.id} className="card" style={{marginBottom:12,
+              border: isTplSelected ? '1.5px solid var(--accent)' : '1.5px solid var(--border)',
+              background: isTplSelected ? 'rgba(29,78,216,0.05)' : 'var(--surface2)',
+              cursor: tplSelecting ? 'pointer' : 'default'
+            }} onClick={()=>{ if(tplSelecting) toggleTplSelect(tplId); }}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  {tplSelecting && (
+                    <div onClick={e=>{e.stopPropagation();toggleTplSelect(tplId);}} style={{width:22,height:22,borderRadius:6,border:`2px solid ${isTplSelected?'var(--accent)':'var(--border)'}`,background:isTplSelected?'var(--accent)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,cursor:'pointer'}}>
+                      {isTplSelected && <i className="ti ti-check" style={{fontSize:13,color:'#ffffff'}}></i>}
+                    </div>
+                  )}
+                  <div onClick={()=>tplSelecting&&toggleTplSelect(idx)} style={{cursor:tplSelecting?'pointer':'default'}}>
+                    <h3>{t.name}</h3><div style={{color:'var(--muted)',fontSize:13}}>{t.exercises.length} exercises</div>
+                  </div>
+                </div>
+                {!tplSelecting && <div style={{display:'flex',gap:8}}>
+                  <button style={{background:'transparent',color:'var(--muted)',padding:'4px'}} onClick={e=>{e.stopPropagation();startEdit(tplId);}}><i className="ti ti-edit" style={{fontSize:18}}></i></button>
+                </div>}
+              </div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6,marginBottom: tplSelecting?0:14}}>{t.exercises.map((ex,i)=><span key={i} style={{display:'inline-flex',alignItems:'center',background:'var(--surface3)',color:'#ffffff',borderRadius:8,padding:'4px 10px',fontSize:12,fontWeight:600,marginBottom:2}}>{ex}</span>)}</div>
+              {!tplSelecting && <div style={{marginTop:14}}><button className="btn-primary" onClick={e=>{e.stopPropagation();onStartWorkout(t);}}><i className="ti ti-player-play"></i> Start workout</button></div>}
+            </div>
+          );
+        })
+      }
+      {!tplSelecting && (
+        <button className="btn-ghost" style={{width:'100%',marginTop:8,display:'flex',alignItems:'center',gap:8,justifyContent:'center'}} onClick={()=>set({creating:true})}>
+          <i className="ti ti-plus"></i> New template
+        </button>
+      )}
+    </div>
+  );
+}
+
+
+// ── DraggableWorkoutExercises ─────────────────────────────────────────────────
+function DraggableWorkoutExercises({ exercises, workouts, templates, collapsedMap, setCollapsedMap, onUpdate, onRemove, onDone, onReorder }) {
+  const [dragIdx,  setDragIdx]  = useState(null);
+  const [overIdx,  setOverIdx]  = useState(null);
+
+  const handleDragStart = (e, i) => {
+    setDragIdx(i);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(i));
+  };
+
+  const handleDragOver = (e, i) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if(i !== overIdx) setOverIdx(i);
+  };
+
+  const handleDrop = (e, i) => {
+    e.preventDefault();
+    const from = parseInt(e.dataTransfer.getData('text/plain'));
+    setDragIdx(null); setOverIdx(null);
+    if(from === i) return;
+    const reordered = [...exercises];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(i, 0, moved);
+    // Also reorder collapsedMap
+    const newMap = {};
+    reordered.forEach((_, newI) => {
+      const oldI = exercises.indexOf(reordered[newI]);
+      if(collapsedMap[oldI] !== undefined) newMap[newI] = collapsedMap[oldI];
+    });
+    setCollapsedMap(newMap);
+    onReorder(reordered);
+  };
+
+  const handleDragEnd = () => { setDragIdx(null); setOverIdx(null); };
+
+  return (
+    <div>
+      {exercises.map((ex, idx) => {
+        const isDragging = dragIdx === idx;
+        const isOver     = overIdx === idx && dragIdx !== null && dragIdx !== idx;
+        const insertBefore = isOver && dragIdx > idx;
+        const insertAfter  = isOver && dragIdx < idx;
+
+        return (
+          <div key={idx}
+            draggable
+            onDragStart={e=>{ if(!e.currentTarget.dataset.gripDrag){e.preventDefault();return;} handleDragStart(e,idx); }}
+            onDragOver={e=>handleDragOver(e,idx)}
+            onDrop={e=>handleDrop(e,idx)}
+            onDragEnd={e=>{ delete e.currentTarget.dataset.gripDrag; handleDragEnd(); }}
+            style={{opacity: isDragging ? 0.35 : 1, transition:'opacity .15s'}}>
+            {insertBefore && (
+              <div style={{height:3,background:'var(--accent)',borderRadius:4,margin:'4px 0',opacity:.8}}></div>
+            )}
+            <div style={{display:'flex',alignItems:'stretch',marginBottom:10}}>
+              <div
+                onMouseDown={e=>{ const outer=e.currentTarget.closest('[draggable]'); if(outer) outer.dataset.gripDrag='1'; }}
+                onMouseUp={e=>{ const outer=e.currentTarget.closest('[draggable]'); if(outer) delete outer.dataset.gripDrag; }}
+                style={{
+                  background:'var(--surface3)',
+                  borderRadius:'14px 0 0 14px',
+                  display:'flex',alignItems:'center',justifyContent:'center',
+                  padding:'0 10px',cursor:'grab',touchAction:'none',flexShrink:0,
+                  borderRight:'1.5px solid var(--surface2)'
+                }}>
+                <i className="ti ti-grip-vertical" style={{fontSize:16,color:'var(--muted)'}}></i>
+              </div>
+              <div style={{flex:1,minWidth:0}}>
+                <ExerciseEditor
+                  ex={ex} idx={idx} workouts={workouts} templates={templates}
+                  onUpdate={onUpdate} onRemove={onRemove} onDone={onDone}
+                  collapsed={!!collapsedMap[idx]}
+                  onToggleCollapse={()=>setCollapsedMap(prev=>({...prev,[idx]:!prev[idx]}))}
+                />
+              </div>
+            </div>
+            {insertAfter && (
+              <div style={{height:3,background:'var(--accent)',borderRadius:4,margin:'4px 0',opacity:.8}}></div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── WorkoutTab ────────────────────────────────────────────────────────────────
+function WorkoutTab({ workouts, setWorkouts, templates, wktState, setWktState, startTemplate, repeatWorkout, onClearTemplate, onClearRepeat, onDiscardFromTemplate }) {
+  const { active, note } = wktState;
+  const set = patch => setWktState(s=>({...s,...patch}));
+  const [saveWarning, setSaveWarning] = useState(false);
+  const [saveConfirmed, setSaveConfirmed] = useState(false);
+  const [discardConfirm, setDiscardConfirm] = useState(false);
+  const [saveAttempted, setSaveAttempted] = useState(false);
+  const [collapsedMap, setCollapsedMap] = useState({});
+
+  useEffect(()=>{
+    if(!startTemplate) return;
+    const dateOverride = startTemplate._dateOverride || null;
+    set({active:{name:startTemplate.name,exercises:startTemplate.exercises.map(n=>({name:n,mode:'strength',sets:makeSets(3,'strength'),done:false})),dateOverride,timeOverride:'',startTime:new Date().toISOString()},note:'',fromTemplate:true});
+    setCollapsedMap({});
+    onClearTemplate();
+  },[startTemplate]);
+
+  useEffect(()=>{
+    if(!repeatWorkout) return;
+    set({active:{name:repeatWorkout.name+' (repeat)',exercises:repeatWorkout.exercises.map(ex=>({...ex,done:false}))},note:''});
+    onClearRepeat();
+  },[repeatWorkout]);
+
+  const updateEx = (idx,newEx) => set({active:{...active,exercises:active.exercises.map((e,i)=>i===idx?newEx:e)}});
+  const removeEx = idx         => set({active:{...active,exercises:active.exercises.filter((_,i)=>i!==idx)}});
+  const markDone = idx => {
+    const ex = active.exercises[idx];
+    set({active:{...active,exercises:active.exercises.map((e,i)=>i===idx?{...e,done:!e.done}:e)}});
+    // Auto-collapse when marking done, auto-expand when unmarking
+    if(!ex.done) setCollapsedMap(prev=>({...prev,[idx]:true}));
+    else setCollapsedMap(prev=>({...prev,[idx]:false}));
+  };
+
+  const saveWorkout = async () => {
+    if(!active) return;
+    if(!active.name?.trim()) { setSaveAttempted(true); return; }
+    // Soft validation — check for missing reps in strength sets
+    let hasMissing = false;
+    for(const ex of active.exercises) {
+      if((ex.mode||'strength')==='strength') {
+        for(const s of ex.sets) {
+          if(s.reps===''||s.reps===undefined||s.reps===null) { hasMissing=true; break; }
+        }
+      }
+      if(hasMissing) break;
+    }
+    if(hasMissing && !saveConfirmed) { setSaveWarning(true); return; }
+    setSaveWarning(false); setSaveConfirmed(false);
+    let finalDate;
+    if(active.dateOverride || active.timeOverride) {
+      const d = active.dateOverride || new Date().toISOString().slice(0,10);
+      const t = active.timeOverride || new Date().toTimeString().slice(0,5);
+      finalDate = new Date(`${d}T${t}`).toISOString();
+    } else {
+      finalDate = new Date().toISOString();
+    }
+    const {dateOverride,timeOverride,startTime,...activeClean} = active;
+    const workout = {...activeClean, date:finalDate, note};
+    const updated = [...workouts, workout];
+    setWorkouts(updated);
+    await dbSave('workouts', updated);
+    set({active:null,note:''});
+  };
+
+  if(!active) return (
+    <div>
+      <h2 style={{marginBottom:20}}>Workout</h2>
+      <div className="empty"><i className="ti ti-barbell"></i>No active workout<br/><small style={{marginTop:8,display:'block'}}>Start from a template or begin from scratch</small></div>
+      <div style={{height:16}}></div>
+      <button className="btn-primary" onClick={()=>set({active:{name:'',exercises:[]},note:''})}><i className="ti ti-plus"></i> Start empty workout</button>
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{marginBottom:16}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:6}}>
+          <div className="label" style={{marginBottom:0}}>Workout name</div>
+          {active.exercises.length>0 && (
+            <button onClick={()=>setDiscardConfirm(true)} style={{background:'transparent',color:'#a93226',fontSize:12,fontWeight:600,padding:'4px 8px',border:'none',borderRadius:8,display:'flex',alignItems:'center',gap:4}}>
+              <i className="ti ti-x" style={{fontSize:12}}></i> Discard workout
+            </button>
+          )}
+        </div>
+        <input value={active.name} onChange={e=>set({active:{...active,name:e.target.value}})} placeholder="e.g. Monday Push" style={{marginBottom:10}} />
+        <div className="label">Color label</div>
+        <div style={{marginBottom:10}}><ColorPicker value={active.color||'none'} onChange={c=>set({active:{...active,color:c}})} /></div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:10}}>
+          <div>
+            <div className="label" style={{marginBottom:6}}>Date</div>
+            <input type="date" value={active.dateOverride||new Date(active.startTime||Date.now()).toISOString().slice(0,10)}
+              onChange={e=>set({active:{...active,dateOverride:e.target.value}})}
+              style={{padding:'10px 12px',fontSize:13}} />
+          </div>
+          <div>
+            <div className="label" style={{marginBottom:6}}>Time</div>
+            <input type="time" value={active.timeOverride||new Date(active.startTime||Date.now()).toTimeString().slice(0,5)}
+              onChange={e=>set({active:{...active,timeOverride:e.target.value}})}
+              style={{padding:'10px 12px',fontSize:13}} />
+          </div>
+        </div>
+        
+      </div>
+      <DraggableWorkoutExercises
+        exercises={active.exercises}
+        workouts={workouts}
+        templates={templates}
+        collapsedMap={collapsedMap}
+        setCollapsedMap={setCollapsedMap}
+        onUpdate={updateEx}
+        onRemove={removeEx}
+        onDone={markDone}
+        onReorder={reordered=>set({active:{...active,exercises:reordered}})}
+      />
+      <button className="btn-ghost" style={{width:'100%',marginBottom:14,display:'flex',alignItems:'center',gap:8,justifyContent:'center'}}
+        onClick={()=>{
+          const newIdx = active.exercises.length;
+          set({active:{...active,exercises:[...active.exercises,{name:'New exercise',mode:'strength',sets:makeSets(3,'strength'),done:false}]}});
+          setCollapsedMap(prev=>({...prev,[newIdx]:false}));
+        }}>
+        <i className="ti ti-plus"></i> Add exercise
+      </button>
+      <div className="label">Notes</div>
+      <textarea value={note} onChange={e=>set({note:e.target.value})} placeholder="How did the workout go?" style={{minHeight:70,resize:'none',marginBottom:16}} />
+      {saveWarning && (
+        <div style={{background:'rgba(255,95,126,0.1)',border:'1.5px solid rgba(255,95,126,0.35)',borderRadius:14,padding:'14px 16px',marginBottom:12}}>
+          <div style={{fontSize:14,fontWeight:600,color:'var(--red)',marginBottom:10}}>
+            <i className="ti ti-alert-triangle" style={{marginRight:6}}></i>
+            Some sets are missing reps. Save anyway?
+          </div>
+          <div style={{display:'flex',gap:8}}>
+            <button className="btn-ghost" style={{flex:1,padding:'10px',fontSize:13}} onClick={()=>setSaveWarning(false)}>Go back</button>
+            <button style={{flex:1,padding:'10px',fontSize:13,background:'rgba(255,95,126,0.15)',color:'var(--red)',border:'1.5px solid rgba(255,95,126,0.35)',borderRadius:12,fontWeight:600}} onClick={()=>{setSaveConfirmed(true); setTimeout(()=>document.getElementById('save-workout-btn').click(),0);}}>Save anyway</button>
+          </div>
+        </div>
+      )}
+      {!active?.name?.trim() && saveAttempted && (
+        <div style={{fontSize:12,color:'#e67e22',fontWeight:600,marginBottom:8,display:'flex',alignItems:'center',gap:6}}>
+          <i className="ti ti-alert-triangle" style={{fontSize:13}}></i> Please enter a workout name before saving.
+        </div>
+      )}
+      <button id="save-workout-btn" className="btn-primary" onClick={saveWorkout}><i className="ti ti-device-floppy"></i> Save workout</button>
+      {discardConfirm && (
+        <ConfirmDialog
+          message="Discard this workout?"
+          subMessage="All recorded exercises and sets will be lost."
+          onConfirm={()=>{ setDiscardConfirm(false); const wasFromTemplate=active?.fromTemplate; set({active:null,note:''}); if(wasFromTemplate && onDiscardFromTemplate) onDiscardFromTemplate(); }}
+          onCancel={()=>setDiscardConfirm(false)}
+        />
+      )}
+      <button className="btn-danger" style={{width:'100%',marginTop:10}} onClick={()=>setDiscardConfirm(true)}>
+        <i className="ti ti-x"></i> Discard workout
+      </button>
+    </div>
+  );
+}
+
+// ── Confirm Dialog ────────────────────────────────────────────────────────────
+function ConfirmDialog({ message, subMessage, onConfirm, onCancel }) {
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.75)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'0 24px'}}>
+      <div style={{background:'var(--surface2)',border:'1.5px solid var(--border)',borderRadius:20,padding:24,maxWidth:360,width:'100%'}}>
+        <div style={{fontSize:17,fontWeight:700,marginBottom:8,lineHeight:1.4}}>{message}</div>
+        {subMessage && <div style={{fontSize:13,color:'var(--red)',background:'rgba(255,95,126,0.1)',border:'1.5px solid rgba(255,95,126,0.25)',borderRadius:10,padding:'9px 12px',lineHeight:1.5}}>
+          <i className="ti ti-alert-triangle" style={{marginRight:6,fontSize:13}}></i>{subMessage}
+        </div>}
+        <div style={{display:'flex',gap:10,marginTop:20}}>
+          <button className="btn-ghost" style={{flex:1,padding:'12px'}} onClick={onCancel}>Cancel</button>
+          <button className="btn-danger" style={{flex:1,padding:'12px',width:'auto'}} onClick={onConfirm}>
+            <i className="ti ti-trash" style={{marginRight:6}}></i>Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── EditWorkoutView ───────────────────────────────────────────────────────────
+function EditWorkoutView({ workout, workouts, setWorkouts, onDone, onCancel }) {
+  const [edited, setEdited] = useState(JSON.parse(JSON.stringify(workout)));
+
+  const updateEx = (idx, newEx) => setEdited(prev => ({...prev, exercises: prev.exercises.map((e,i)=>i===idx?newEx:e)}));
+  const removeEx = idx => setEdited(prev => ({...prev, exercises: prev.exercises.filter((_,i)=>i!==idx)}));
+  const markDone = idx => setEdited(prev => ({...prev, exercises: prev.exercises.map((e,i)=>i===idx?{...e,done:!e.done}:e)}));
+
+  const saveEdited = async () => {
+    const updated = workouts.map(w => w === workout ? edited : w);
+    setWorkouts(updated);
+    await dbSave('workouts', updated);
+    onDone();
+  };
+
+  return (
+    <div>
+      <button className="back-btn" onClick={onCancel}><i className="ti ti-arrow-left"></i> Back</button>
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.8,marginBottom:8}}>Workout name</div>
+        <input value={edited.name||''} onChange={e=>setEdited(prev=>({...prev,name:e.target.value}))} placeholder="Workout name" style={{marginBottom:10}} />
+        <div style={{fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.8,marginBottom:8}}>Color label</div>
+        <div style={{marginBottom:10}}><ColorPicker value={edited.color||'none'} onChange={c=>setEdited(prev=>({...prev,color:c}))} /></div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:10}}>
+          <div>
+            <div style={{fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.8,marginBottom:6}}>Date</div>
+            <input type="date" value={edited.date?new Date(edited.date).toISOString().slice(0,10):''}
+              onChange={e=>{
+                const t = edited.date ? new Date(edited.date).toTimeString().slice(0,5) : '00:00';
+                setEdited(prev=>({...prev,date:new Date(`${e.target.value}T${t}`).toISOString()}));
+              }} style={{padding:'10px 12px',fontSize:13}} />
+          </div>
+          <div>
+            <div style={{fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.8,marginBottom:6}}>Time</div>
+            <input type="time" value={edited.date?new Date(edited.date).toTimeString().slice(0,5):''}
+              onChange={e=>{
+                const d = edited.date ? new Date(edited.date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10);
+                setEdited(prev=>({...prev,date:new Date(`${d}T${e.target.value}`).toISOString()}));
+              }} style={{padding:'10px 12px',fontSize:13}} />
+          </div>
+        </div>
+        <span style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(91,159,255,.12)',color:'var(--blue)',borderRadius:8,padding:'4px 10px',fontSize:12,fontWeight:600}}>
+          <i className="ti ti-edit" style={{fontSize:13}}></i> Editing
+        </span>
+      </div>
+      {edited.exercises.map((ex,idx)=>(
+        <ExerciseEditor key={idx} ex={ex} idx={idx} workouts={workouts} templates={[]} onUpdate={updateEx} onRemove={removeEx} onDone={markDone} />
+      ))}
+      <button className="btn-ghost" style={{width:'100%',marginBottom:14,display:'flex',alignItems:'center',gap:8,justifyContent:'center'}}
+        onClick={()=>setEdited(prev=>({...prev,exercises:[...prev.exercises,{name:'New exercise',mode:'strength',sets:makeSets(3,'strength'),done:false}]}))}>
+        <i className="ti ti-plus"></i> Add exercise
+      </button>
+      <div style={{fontSize:12,fontWeight:600,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.8,marginBottom:8}}>Notes</div>
+      <textarea value={edited.note||''} onChange={e=>setEdited(prev=>({...prev,note:e.target.value}))} placeholder="Notes..." style={{minHeight:70,resize:'none',marginBottom:16}} />
+      <button className="btn-primary" onClick={saveEdited}><i className="ti ti-device-floppy"></i> Save changes</button>
+    </div>
+  );
+}
+
+// ── HistoryTab ────────────────────────────────────────────────────────────────
+function HistoryTab({ workouts, setWorkouts, templates, setTemplates, histState, setHistState, onRepeatWorkout, setTab, calendarReturn, onClearCalendarReturn }) {
+  const { detail } = histState;
+  const setDetail  = v => setHistState(s=>({...s,detail:v}));
+  const sorted     = [...workouts].reverse();
+
+  const [selecting,      setSelecting]      = useState(false);
+  const [selected,       setSelected]       = useState(new Set());
+  const [confirmMode,    setConfirmMode]    = useState(null);
+  const [editingWorkout, setEditingWorkout] = useState(null);
+  const [singleConfirm,  setSingleConfirm]  = useState(false);
+  const [savedAsTemplate, setSavedAsTemplate] = useState(false);
+  const [histFilter,     setHistFilter]     = useState('all');
+  const [colorFilter,    setColorFilter]    = useState('all');
+  const [colorDropOpen,  setColorDropOpen]  = useState(false);
+
+  const now = new Date();
+  const startOfDay = d => new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const dayOfWeek  = now.getDay()===0?6:now.getDay()-1; // Mon=0
+  const thisMonday = new Date(startOfDay(now)); thisMonday.setDate(now.getDate()-dayOfWeek);
+  const lastMonday = new Date(thisMonday); lastMonday.setDate(thisMonday.getDate()-7);
+  const nextMonday = new Date(thisMonday); nextMonday.setDate(thisMonday.getDate()+7);
+  const firstOfMonth = new Date(now.getFullYear(),now.getMonth(),1);
+
+  const filteredWorkouts = sorted.filter(w => {
+    const d = new Date(w.date);
+    const timeOk = histFilter==='week' ? d >= thisMonday && d < nextMonday
+      : histFilter==='lastweek' ? d >= lastMonday && d < thisMonday
+      : histFilter==='month' ? d >= firstOfMonth
+      : true;
+    const colorOk = colorFilter==='all' ? true
+      : colorFilter==='none' ? (!w.color || w.color==='none')
+      : w.color === colorFilter;
+    return timeOk && colorOk;
+  });
+
+  const toggleSelect = idx => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      next.has(idx) ? next.delete(idx) : next.add(idx);
+      return next;
+    });
+  };
+
+  const exitSelect = () => { setSelecting(false); setSelected(new Set()); };
+
+  const doDeleteAll = async () => {
+    setWorkouts([]); await dbSave('workouts', []);
+    setConfirmMode(null); exitSelect();
+  };
+
+  const doDeleteSelected = async () => {
+    const toRemove = new Set([...selected].map(i => sorted[i]));
+    const updated  = workouts.filter(w => !toRemove.has(w));
+    setWorkouts(updated); await dbSave('workouts', updated);
+    setConfirmMode(null); exitSelect();
+  };
+
+  const deleteWorkout = async idx => {
+    const target  = sorted[idx];
+    const updated = workouts.filter(w=>w!==target);
+    setWorkouts(updated); await dbSave('workouts', updated);
+    setDetail(null);
+  };
+
+  const repeatWorkout = idx => { onRepeatWorkout(sorted[idx]); setDetail(null); setTab('workout'); };
+
+  if(editingWorkout) {
+    return (
+      <EditWorkoutView
+        workout={editingWorkout}
+        workouts={workouts}
+        setWorkouts={setWorkouts}
+        onDone={()=>{
+          setEditingWorkout(null);
+          setDetail(null);
+          if(calendarReturn) { onClearCalendarReturn(); setTab('calendar'); }
+        }}
+        onCancel={()=>setEditingWorkout(null)}
+      />
+    );
+  }
+
+  if(detail!==null && detail<sorted.length) {
+    const w = sorted[detail];
+    return (
+      <div>
+        <button className="back-btn" onClick={()=>{
+          if(calendarReturn) {
+            setDetail(null);
+            onClearCalendarReturn();
+            setTab('calendar');
+          } else {
+            setDetail(null);
+          }
+        }}><i className="ti ti-arrow-left"></i> Back</button>
+        <div style={{marginBottom:20,display:'flex',alignItems:'flex-start',gap:12}}>
+          {colorHex(w.color) && <div style={{width:4,minHeight:40,borderRadius:4,background:colorHex(w.color),flexShrink:0,marginTop:4}}></div>}
+          <div><h2>{w.name||'Workout'}</h2><div style={{color:'var(--muted)',fontSize:13}}>{fmtDate(w.date)} · {fmtTime(w.date)}</div></div>
+        </div>
+        {w.exercises.map((ex,i)=>{
+          const mode=ex.mode||'strength';
+          return (
+            <div key={i} className="card" style={{marginBottom:10}}>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
+                <h3>{ex.name}</h3>
+                <span style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.5}}>{mode}</span>
+              </div>
+              {(ex.sets||[]).map((s,si)=>(
+                <div key={si} style={{display:'flex',alignItems:'center',gap:8,padding:'6px 0',borderBottom:si<ex.sets.length-1?'1px solid var(--border)':'none'}}>
+                  <span style={{fontSize:12,fontWeight:700,color:'var(--muted)',width:20,textAlign:'center'}}>{si+1}</span>
+                  {mode==='cardio'
+                    ?<span style={{flex:1,fontSize:14}}><strong style={{color:'var(--accent)'}}>{s.work||'—'}</strong> work / <strong style={{color:'var(--blue)'}}>{s.rest||'—'}</strong> rest</span>
+                    :<span style={{flex:1,fontSize:14}}><strong style={{color:'var(--accent)'}}>{s.weight||0} kg</strong> × {s.reps} reps</span>}
+                </div>
+              ))}
+            </div>
+          );
+        })}
+        {w.note && <div className="card" style={{marginTop:10}}><div className="label">Notes</div><p style={{color:'var(--muted)',fontSize:14,lineHeight:1.6}}>{w.note}</p></div>}
+        <div style={{marginTop:16,display:'flex',flexDirection:'column',gap:10}}>
+          <button className="btn-ghost" style={{width:'100%',display:'flex',alignItems:'center',gap:8,justifyContent:'center'}} onClick={()=>setEditingWorkout(sorted[detail])}><i className="ti ti-edit"></i> Edit workout</button>
+          <button className="btn-blue" onClick={()=>repeatWorkout(detail)}><i className="ti ti-repeat"></i> Repeat this workout</button>
+          <button className="btn-ghost" style={{width:'100%',display:'flex',alignItems:'center',gap:8,justifyContent:'center'}} onClick={async()=>{
+            const w = sorted[detail];
+            const newTpl = { id: Date.now(), name: w.name||'Workout', exercises: w.exercises.map(ex=>ex.name) };
+            const updatedTpls = [...templates, newTpl];
+            setTemplates(updatedTpls);
+            await dbSave('templates', updatedTpls);
+            setSavedAsTemplate(true);
+            setTimeout(()=>setSavedAsTemplate(false), 2500);
+          }}>
+            <i className="ti ti-layout-cards"></i>
+            {savedAsTemplate ? '✓ Saved as template!' : 'Save as template'}
+          </button>
+          {singleConfirm && (
+            <ConfirmDialog
+              message="Are you sure you want to delete this workout?"
+              subMessage="Deleting workout history will affect your progress data."
+              onConfirm={()=>{ setSingleConfirm(false); deleteWorkout(detail); }}
+              onCancel={()=>setSingleConfirm(false)}
+            />
+          )}
+          <button className="btn-danger" style={{width:'100%'}} onClick={()=>setSingleConfirm(true)}><i className="ti ti-trash"></i> Delete workout</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {confirmMode && (
+        <ConfirmDialog
+          message={confirmMode==='all'
+            ? 'Are you sure you want to delete the WHOLE history of workouts?'
+            : `Are you sure you want to delete ${selected.size} selected workout${selected.size!==1?'s':''}`}
+          subMessage="Deleting workout history will affect your progress data."
+          onConfirm={confirmMode==='all' ? doDeleteAll : doDeleteSelected}
+          onCancel={()=>setConfirmMode(null)}
+        />
+      )}
+      <div style={{marginBottom:16}}>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+        <h2>History</h2>
+        {sorted.length>0 && (
+          <div style={{display:'flex',gap:8}}>
+            {!selecting ? (
+              <button className="btn-ghost" style={{padding:'8px 14px',fontSize:13,display:'flex',alignItems:'center',gap:6}} onClick={()=>setSelecting(true)}>
+                <i className="ti ti-checks"></i> Select
+              </button>
+            ) : (
+              <>
+                <button className="btn-danger" style={{padding:'8px 14px',fontSize:13,width:'auto',display:'flex',alignItems:'center',gap:6}} onClick={()=>setConfirmMode('all')}>
+                  <i className="ti ti-trash"></i> All
+                </button>
+                {selected.size>0 && (
+                  <button className="btn-danger-soft" style={{padding:'8px 14px',fontSize:13,width:'auto',display:'flex',alignItems:'center',gap:6}} onClick={()=>setConfirmMode('selected')}>
+                    <i className="ti ti-trash"></i> Selected ({selected.size})
+                  </button>
+                )}
+                <button className="btn-ghost" style={{padding:'8px 14px',fontSize:13}} onClick={exitSelect}>Cancel</button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,marginBottom:16}}>
+        <select className="filter-select" value={histFilter} onChange={e=>setHistFilter(e.target.value)}>
+          <option value='all'>All time</option>
+          <option value='week'>This week</option>
+          <option value='lastweek'>Last week</option>
+          <option value='month'>This month</option>
+        </select>
+        <div style={{position:'relative'}}>
+          <button onClick={()=>setColorDropOpen(v=>!v)} style={{
+            width:'100%',background:'var(--surface3)',border:'1.5px solid var(--border)',borderRadius:10,
+            color:'var(--text)',fontSize:13,fontWeight:600,padding:'8px 30px 8px 10px',textAlign:'left',
+            display:'flex',alignItems:'center',gap:8,position:'relative'
+          }}>
+            {colorFilter==='all' ? (
+              <><div style={{width:12,height:12,borderRadius:'50%',border:'1.5px dashed var(--muted)',flexShrink:0}}></div>All colors</>
+            ) : colorFilter==='none' ? (
+              <><div style={{width:12,height:12,borderRadius:'50%',border:'1.5px dashed var(--muted)',flexShrink:0}}></div>No color</>
+            ) : (
+              <><div style={{width:12,height:12,borderRadius:'50%',background:colorHex(colorFilter),flexShrink:0}}></div>{WORKOUT_COLORS.find(c=>c.id===colorFilter)?.label}</>
+            )}
+            <i className="ti ti-chevron-down" style={{fontSize:11,color:'var(--muted)',position:'absolute',right:10}}></i>
+          </button>
+          {colorDropOpen && (
+            <div style={{position:'absolute',top:'calc(100% + 4px)',left:0,right:0,background:'var(--surface2)',border:'1.5px solid var(--border)',borderRadius:12,zIndex:200,overflow:'hidden',boxShadow:'0 8px 24px rgba(0,0,0,0.4)'}}>
+              {[{id:'all',label:'All colors',hex:null},{id:'none',label:'No color',hex:null},...WORKOUT_COLORS.filter(c=>c.id!=='none')].map((c,i,arr)=>(
+                <div key={c.id} onClick={()=>{setColorFilter(c.id);setColorDropOpen(false);}} style={{
+                  padding:'10px 12px',cursor:'pointer',display:'flex',alignItems:'center',gap:10,
+                  background: colorFilter===c.id ? 'var(--surface3)' : 'transparent',
+                  borderBottom: i<arr.length-1 ? '1px solid var(--border)' : 'none'
+                }}>
+                  <div style={{width:14,height:14,borderRadius:'50%',flexShrink:0,
+                    background: c.hex || 'transparent',
+                    border: c.hex ? 'none' : '1.5px dashed var(--muted)'
+                  }}></div>
+                  <span style={{fontSize:13,fontWeight:600}}>{c.label}</span>
+                  {colorFilter===c.id && <i className="ti ti-check" style={{fontSize:13,color:'var(--accent)',marginLeft:'auto'}}></i>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      </div>
+      {filteredWorkouts.length===0
+        ?<div className="empty"><i className="ti ti-history"></i>No history yet<br/><small style={{marginTop:8,display:'block'}}>Your saved workouts will appear here</small></div>
+        :filteredWorkouts.map((w,idx)=>{
+          const isSelected = selected.has(idx);
+          return (
+            <div key={idx} className="card" style={{marginBottom:12,cursor:'pointer',
+              border: isSelected ? '1.5px solid var(--accent)' : '1.5px solid var(--border)',
+              background: isSelected ? 'rgba(29,78,216,0.05)' : 'var(--surface2)',
+              borderLeft: colorHex(w.color) ? `4px solid ${colorHex(w.color)}` : (isSelected?'1.5px solid var(--accent)':'1.5px solid var(--border)')
+            }} onClick={()=> selecting ? toggleSelect(idx) : setDetail(idx)}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+                <div style={{display:'flex',alignItems:'center',gap:10}}>
+                  {selecting && (
+                    <div style={{width:22,height:22,borderRadius:6,border:`2px solid ${isSelected?'var(--accent)':'var(--border)'}`,background:isSelected?'var(--accent)':'transparent',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                      {isSelected && <i className="ti ti-check" style={{fontSize:13,color:'#ffffff'}}></i>}
+                    </div>
+                  )}
+                  <div><h3>{w.name||'Workout'}</h3><div style={{color:'var(--muted)',fontSize:13,marginTop:2}}>{fmtDate(w.date)} · {fmtTime(w.date)}</div></div>
+                </div>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:6}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8}}>
+                    <span style={{fontSize:12,color:'var(--muted)',background:'var(--surface3)',borderRadius:8,padding:'4px 10px',fontWeight:600}}>{w.exercises.length} exercises</span>
+                    <i className="ti ti-chevron-right" style={{color:'var(--muted)',fontSize:16}}></i>
+                  </div>
+                  {!selecting && <i className="ti ti-chevron-right" style={{color:'var(--muted)',fontSize:18}}></i>}
+                </div>
+              </div>
+              <div style={{borderTop:'1.5px solid var(--border)',margin:'12px 0 8px'}}></div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                {w.exercises.slice(0,3).map((ex,i)=><span key={i} style={{display:'inline-flex',alignItems:'center',borderRadius:8,padding:'4px 10px',fontSize:12,fontWeight:600,
+                  background: colorHex(w.color) ? `${colorHex(w.color)}22` : 'var(--surface3)',
+                  color: colorHex(w.color) || '#ffffff'
+                }}>{ex.name}</span>)}
+                {w.exercises.length>3&&<span style={{fontSize:12,color:colorHex(w.color)||'var(--muted)'}}>+{w.exercises.length-3}</span>}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  );
+}
+
+// ── ProgressTab ─────────────────────────────────────────────────────────────
+function ProgressTab({ workouts, progState, setProgState }) {
+  const { selectedEx, metric, progressView } = progState;
+  const set = patch => setProgState(s=>({...s,...patch}));
+  const view = progressView || 'exercise';
+
+  const subTabs = [
+    ['exercise', 'Exercise'],
+    ['records',  'Records'],
+    ['volume',   'Volume'],
+    ['stats',    'Stats'],
+  ];
+
+  if(workouts.length===0) return (
+    <div>
+      <h2 style={{marginBottom:20}}>Progress</h2>
+      <div className="empty"><i className="ti ti-chart-line"></i>No data yet<br/><small style={{marginTop:8,display:'block'}}>Save some workouts to see your progress</small></div>
+    </div>
+  );
+
+  return (
+    <div>
+      <h2 style={{marginBottom:16}}>Progress</h2>
+      <div style={{display:'flex',gap:4,background:'var(--surface)',padding:4,borderRadius:14,marginBottom:20}}>
+        {subTabs.map(([k,l])=>(
+          <button key={k} onClick={()=>set({progressView:k})} style={{
+            flex:1,padding:'8px 4px',borderRadius:10,border:'none',fontSize:12,fontWeight:600,
+            background: view===k ? 'var(--surface3)' : 'transparent',
+            color: view===k ? 'var(--text)' : 'var(--muted)'
+          }}>{l}</button>
+        ))}
+      </div>
+      {view==='exercise' && <ProgressExerciseView workouts={workouts} progState={progState} setProgState={setProgState} />}
+      {view==='records'  && <ProgressRecordsView  workouts={workouts} />}
+      {view==='volume'   && <ProgressVolumeView   workouts={workouts} />}
+      {view==='stats'    && <ProgressStatsView    workouts={workouts} />}
+    </div>
+  );
+}
+
+// ── Progress: Exercise view ───────────────────────────────────────────────────
+function ProgressExerciseView({ workouts, progState, setProgState }) {
+  const { selectedEx, metric } = progState;
+  const set = patch => setProgState(s=>({...s,...patch}));
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
+
+  const seen = {}; const exNames = [];
+  workouts.forEach(w=>w.exercises.forEach(ex=>{
+    if((ex.mode||'strength')==='strength'){
+      const k=ex.name.toLowerCase();
+      seen[k]=(seen[k]||0)+1;
+      if(!exNames.find(n=>n.toLowerCase()===k)) exNames.push(ex.name);
+    }
+  }));
+  const trackable = exNames.filter(n=>seen[n.toLowerCase()]>=1).sort((a,b)=>a.localeCompare(b));
+
+  const dataPoints = [];
+  if(selectedEx){
+    workouts.forEach(w=>{
+      const ex=w.exercises.find(e=>e.name.toLowerCase()===selectedEx.toLowerCase()&&(e.mode||'strength')==='strength');
+      if(!ex||!ex.sets||ex.sets.length===0) return;
+      const val = metric==='1rm' ? best1RM(ex.sets) : metric==='volume' ? totalVol(ex.sets) : bestSetVol(ex.sets);
+      if(val>0) dataPoints.push({date:w.date,val:Math.round(val*10)/10});
+    });
+  }
+
+  const lastVal  = dataPoints[dataPoints.length-1]?.val;
+  const bestVal  = dataPoints.length ? Math.max(...dataPoints.map(d=>d.val)) : 0;
+  const firstVal = dataPoints[0]?.val;
+  const delta    = firstVal && lastVal ? ((lastVal-firstVal)/firstVal*100).toFixed(1) : null;
+  const metricLabel = metric==='1rm'?'Est. 1RM (kg)':metric==='volume'?'Total volume (kg)':'Best set volume (kg)';
+
+  useEffect(()=>{
+    if(!chartRef.current||!selectedEx||dataPoints.length<2){
+      if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}
+      return;
+    }
+    if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}
+    const ctx=chartRef.current.getContext('2d');
+    chartInstance.current=new Chart(ctx,{
+      type:'line',
+      data:{labels:dataPoints.map(d=>fmtShort(d.date)),datasets:[{data:dataPoints.map(d=>d.val),borderColor:'#1D4ED8',backgroundColor:'rgba(29,78,216,0.08)',pointBackgroundColor:'#1D4ED8',pointBorderColor:'#1D4ED8',pointRadius:5,pointHoverRadius:7,borderWidth:2.5,fill:true,tension:0.35}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c1c2e',borderColor:'#2e2e45',borderWidth:1,titleColor:'#8884a0',bodyColor:'#1D4ED8',bodyFont:{size:14,weight:'700'},callbacks:{label:ctx=>`${ctx.parsed.y} kg`}}},scales:{x:{ticks:{color:'#8884a0',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.06)'}},y:{ticks:{color:'#8884a0',font:{size:11},callback:v=>v+' kg'},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.06)'}}}}
+    });
+    return ()=>{if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}};
+  },[selectedEx,metric,workouts]);
+
+  return (
+    <div>
+      {trackable.length===0
+        ?<div className="empty"><i className="ti ti-barbell"></i>No strength exercises found</div>
+        :<>
+          <div className="label">Select exercise</div>
+          <div style={{marginBottom:18}}>
+            {trackable.map(name=>(
+              <div key={name} className={`ex-pill${selectedEx===name?' active-ex':''}`} onClick={()=>set({selectedEx:name})}>
+                <i className="ti ti-barbell" style={{fontSize:16,color:selectedEx===name?'var(--accent)':'var(--muted)'}}></i>
+                <span style={{fontWeight:600,fontSize:14}}>{name}</span>
+                <span style={{marginLeft:'auto',fontSize:12,color:'var(--muted)'}}>
+                  {workouts.filter(w=>w.exercises.some(e=>e.name.toLowerCase()===name.toLowerCase()&&(e.mode||'strength')==='strength')).length} sessions
+                </span>
+              </div>
+            ))}
+          </div>
+          {selectedEx&&(
+            <>
+              <div className="label">Metric</div>
+              <div className="metric-toggle">
+                {[['1rm','Est. 1RM'],['bestset','Best set vol.'],['volume','Total volume']].map(([k,l])=>(
+                  <button key={k} className={`metric-btn${metric===k?' active':''}`} onClick={()=>set({metric:k})}>{l}</button>
+                ))}
+              </div>
+              {dataPoints.length<2
+                ?<div className="card" style={{textAlign:'center',color:'var(--muted)',padding:'28px 18px'}}><i className="ti ti-chart-line" style={{fontSize:32,display:'block',marginBottom:8,opacity:.4}}></i>Record at least 2 workouts with this exercise to see a chart</div>
+                :<>
+                  <div className="stat-row">
+                    <div className="stat-box"><div className="stat-val">{lastVal} kg</div><div className="stat-lbl">Latest</div></div>
+                    <div className="stat-box"><div className="stat-val">{Math.round(bestVal*10)/10} kg</div><div className="stat-lbl">All-time best</div></div>
+                    <div className="stat-box"><div className="stat-val">{dataPoints.length}</div><div className="stat-lbl">Sessions</div></div>
+                    <div className="stat-box"><div className="stat-val" style={{color:delta>=0?'var(--accent)':'var(--red)'}}>{delta>=0?'+':''}{delta}%</div><div className="stat-lbl">Overall change</div></div>
+                  </div>
+                  <div className="card" style={{padding:'16px 14px'}}>
+                    <div style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.6,marginBottom:12}}>{metricLabel}</div>
+                    <div style={{height:200,position:'relative'}}><canvas ref={chartRef}></canvas></div>
+                  </div>
+                </>
+              }
+            </>
+          )}
+        </>
+      }
+    </div>
+  );
+}
+
+// ── Progress: Records view ────────────────────────────────────────────────────
+function ProgressRecordsView({ workouts }) {
+  // For each exercise collect all-time bests
+  const records = {};
+  workouts.forEach(w => {
+    const workout_date = w.date;
+    w.exercises.forEach(ex => {
+      if((ex.mode||'strength') !== 'strength' || !ex.sets?.length) return;
+      const name = toSentenceCase(ex.name);
+      if(!records[name]) records[name] = { maxWeight:0, maxReps:0, maxWeightReps:0, maxRepsWeight:0, best1RM:0, sessions:0, maxWeightDate:null, maxRepsDate:null };
+      records[name].sessions++;
+      ex.sets.forEach(s => {
+        const w = parseFloat(s.weight)||0;
+        const r = parseFloat(s.reps)||0;
+        if(w > records[name].maxWeight) { records[name].maxWeight = w; records[name].maxWeightReps = r; records[name].maxWeightDate = workout_date; }
+        if(r > records[name].maxReps && w > 0) { records[name].maxReps = r; records[name].maxRepsWeight = w; records[name].maxRepsDate = workout_date; }
+        const rm = epley(w, r);
+        if(rm > records[name].best1RM) records[name].best1RM = rm;
+      });
+    });
+  });
+
+  const entries = Object.entries(records).sort((a,b)=>a[0].localeCompare(b[0]));
+
+  if(entries.length===0) return <div className="empty"><i className="ti ti-trophy"></i>No records yet<br/><small style={{marginTop:8,display:'block'}}>Complete some strength workouts to see your PRs</small></div>;
+
+  return <RecordsList key="records" entries={entries} />;
+}
+
+function RecordsList({ entries }) {
+  const [expandedSet, setExpandedSet] = useState(new Set());
+
+  const toggle = name => setExpandedSet(prev => {
+    const next = new Set(prev);
+    next.has(name) ? next.delete(name) : next.add(name);
+    return next;
+  });
+
+  return (
+    <div>
+      {entries.map(([name, r])=>{
+        const expanded = expandedSet.has(name);
+        return (
+          <div key={name} className="card" style={{marginBottom:12}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',cursor:'pointer'}} onClick={()=>toggle(name)}>
+              <div style={{display:'flex',alignItems:'center',gap:10}}>
+                <h3>{name}</h3>
+                <span style={{fontSize:12,color:'var(--muted)',background:'var(--surface3)',borderRadius:8,padding:'3px 9px',fontWeight:600}}>{r.sessions} sessions</span>
+              </div>
+              <i className={`ti ${expanded?'ti-chevron-up':'ti-chevron-down'}`} style={{fontSize:16,color:'var(--muted)'}}></i>
+            </div>
+            {expanded && (
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,alignItems:'stretch',marginTop:12}}>
+                <div style={{background:'var(--surface3)',borderRadius:10,padding:'10px 12px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                  <div style={{fontSize:18,fontWeight:800,color:'var(--accent)'}}>{Math.round(r.best1RM*10)/10}</div>
+                  <div style={{fontSize:10,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.5,marginTop:3}}>Est. 1RM kg</div>
+                </div>
+                <div style={{background:'var(--surface3)',borderRadius:10,padding:'10px 12px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                  <div style={{fontSize:18,fontWeight:800,color:'var(--accent)'}}>{r.maxWeight}</div>
+                  <div style={{fontSize:10,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.5,marginTop:2}}>Max kg</div>
+                  <div style={{fontSize:9.9,color:'var(--muted)',marginTop:2}}>(× {r.maxWeightReps} reps)</div>
+                  {r.maxWeightDate && <div style={{fontSize:9.9,color:'var(--muted)',marginTop:1}}>{fmtShort(r.maxWeightDate)}</div>}
+                </div>
+                <div style={{background:'var(--surface3)',borderRadius:10,padding:'10px 12px',textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+                  <div style={{fontSize:18,fontWeight:800,color:'var(--accent)'}}>{r.maxReps}</div>
+                  <div style={{fontSize:10,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.5,marginTop:2}}>Max reps</div>
+                  <div style={{fontSize:9.9,color:'var(--muted)',marginTop:2}}>(@ {r.maxRepsWeight} kg)</div>
+                  {r.maxRepsDate && <div style={{fontSize:9.9,color:'var(--muted)',marginTop:1}}>{fmtShort(r.maxRepsDate)}</div>}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ── Progress: Volume view ─────────────────────────────────────────────────────
+function ProgressVolumeView({ workouts }) {
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
+  const [period, setPeriod] = useState('weekly');
+
+  // Group workouts by week or month
+  const grouped = {};
+  workouts.forEach(w => {
+    const d = new Date(w.date);
+    let key;
+    if(period === 'weekly') {
+      const day = d.getDay()===0?6:d.getDay()-1;
+      const monday = new Date(d); monday.setDate(d.getDate()-day);
+      key = monday.toISOString().slice(0,10);
+    } else {
+      key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    }
+    if(!grouped[key]) grouped[key] = 0;
+    w.exercises.forEach(ex => {
+      if((ex.mode||'strength')==='strength') {
+        (ex.sets||[]).forEach(s => {
+          grouped[key] += (parseFloat(s.weight)||0) * (parseFloat(s.reps)||0);
+        });
+      }
+    });
+  });
+
+  const labels = Object.keys(grouped).sort();
+  const values = labels.map(k => Math.round(grouped[k]));
+
+  const fmtLabel = k => period==='weekly'
+    ? new Date(k+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short'})
+    : new Date(k+'-01T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'2-digit'});
+
+  useEffect(()=>{
+    if(!chartRef.current||labels.length===0){
+      if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}
+      return;
+    }
+    if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}
+    const ctx = chartRef.current.getContext('2d');
+    chartInstance.current = new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels: labels.map(fmtLabel),
+        datasets:[{
+          data: values,
+          backgroundColor:'rgba(29,78,216,0.7)',
+          borderColor:'#1D4ED8',
+          borderWidth:1.5,
+          borderRadius:6,
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c1c2e',borderColor:'#2e2e45',borderWidth:1,titleColor:'#8884a0',bodyColor:'#1D4ED8',bodyFont:{size:13,weight:'700'},callbacks:{label:ctx=>`${ctx.parsed.y.toLocaleString()} kg`}}},
+        scales:{
+          x:{ticks:{color:'#8884a0',font:{size:10}},grid:{display:false},border:{color:'rgba(255,255,255,0.06)'}},
+          y:{ticks:{color:'#8884a0',font:{size:10},callback:v=>v>=1000?`${(v/1000).toFixed(1)}t`:`${v}kg`},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'rgba(255,255,255,0.06)'}}
+        }
+      }
+    });
+    return ()=>{if(chartInstance.current){chartInstance.current.destroy();chartInstance.current=null;}};
+  },[period, workouts]);
+
+  if(workouts.length===0) return <div className="empty"><i className="ti ti-chart-bar"></i>No data yet</div>;
+
+  const totalVolumeAll = values.reduce((a,b)=>a+b,0);
+  const avgVolume = values.length ? Math.round(totalVolumeAll/values.length) : 0;
+  const maxVolume = values.length ? Math.max(...values) : 0;
+
+  return (
+    <div>
+      <div style={{display:'flex',gap:4,background:'var(--surface)',padding:3,borderRadius:10,marginBottom:16}}>
+        {[['weekly','Weekly'],['monthly','Monthly']].map(([k,l])=>(
+          <button key={k} onClick={()=>setPeriod(k)} style={{
+            flex:1,padding:'7px 8px',borderRadius:8,border:'none',fontSize:12,fontWeight:600,
+            background:period===k?'var(--surface3)':'transparent',
+            color:period===k?'var(--accent)':'var(--muted)'
+          }}>{l}</button>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:8,marginBottom:16}}>
+        <div className="stat-box"><div className="stat-val" style={{fontSize:16}}>{totalVolumeAll>=1000?`${(totalVolumeAll/1000).toFixed(1)}t`:`${totalVolumeAll}kg`}</div><div className="stat-lbl">Total</div></div>
+        <div className="stat-box"><div className="stat-val" style={{fontSize:16}}>{avgVolume>=1000?`${(avgVolume/1000).toFixed(1)}t`:`${avgVolume}kg`}</div><div className="stat-lbl">Avg / {period==='weekly'?'week':'month'}</div></div>
+        <div className="stat-box"><div className="stat-val" style={{fontSize:16}}>{maxVolume>=1000?`${(maxVolume/1000).toFixed(1)}t`:`${maxVolume}kg`}</div><div className="stat-lbl">Best {period==='weekly'?'week':'month'}</div></div>
+      </div>
+      <div className="card" style={{padding:'16px 14px'}}>
+        <div style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.6,marginBottom:12}}>Total volume (kg)</div>
+        <div style={{height:200,position:'relative'}}><canvas ref={chartRef}></canvas></div>
+      </div>
+    </div>
+  );
+}
+
+// ── Progress: Stats view ──────────────────────────────────────────────────────
+function ProgressStatsView({ workouts }) {
+  if(workouts.length===0) return <div className="empty"><i className="ti ti-chart-pie"></i>No data yet</div>;
+
+  const sorted = [...workouts].sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  // Total workouts
+  const totalWorkouts = workouts.length;
+
+  // Total volume
+  let totalVolAcc = 0;
+  workouts.forEach(w => w.exercises.forEach(ex => {
+    if((ex.mode||'strength')==='strength') (ex.sets||[]).forEach(s=>{ totalVolAcc += (parseFloat(s.weight)||0)*(parseFloat(s.reps)||0); });
+  }));
+
+  // Streak calculation
+  const workoutDays = [...new Set(workouts.map(w=>new Date(w.date).toISOString().slice(0,10)))].sort();
+  let currentStreak=0, longestStreak=0, streak=1;
+  for(let i=1;i<workoutDays.length;i++){
+    const diff = (new Date(workoutDays[i])-new Date(workoutDays[i-1]))/(1000*60*60*24);
+    if(diff===1) { streak++; longestStreak=Math.max(longestStreak,streak); }
+    else { streak=1; }
+  }
+  if(workoutDays.length>0){
+    const lastDay = new Date(workoutDays[workoutDays.length-1]);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const diffToday = (today-lastDay)/(1000*60*60*24);
+    if(diffToday<=1) currentStreak=streak; else currentStreak=0;
+    longestStreak=Math.max(longestStreak,streak);
+  }
+
+  // Avg workouts per week
+  const firstDate = new Date(sorted[0].date);
+  const lastDate  = new Date(sorted[sorted.length-1].date);
+  const weeks = Math.max(1, (lastDate-firstDate)/(1000*60*60*24*7));
+  const avgPerWeek = (totalWorkouts/weeks).toFixed(1);
+
+  // Most trained exercise
+  const exCount = {};
+  workouts.forEach(w=>w.exercises.forEach(ex=>{ const k=toSentenceCase(ex.name); exCount[k]=(exCount[k]||0)+1; }));
+  const mostTrained = Object.entries(exCount).sort((a,b)=>b[1]-a[1])[0];
+
+  // Favourite day
+  const dayCounts = Array(7).fill(0);
+  workouts.forEach(w=>{ dayCounts[new Date(w.date).getDay()]++; });
+  const dayNames2 = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const favDay = dayNames2[dayCounts.indexOf(Math.max(...dayCounts))];
+
+  return (
+    <div>
+      <div className="stat-row" style={{marginBottom:10}}>
+        <div className="stat-box"><div className="stat-val">{totalWorkouts}</div><div className="stat-lbl">Total workouts</div></div>
+        <div className="stat-box"><div className="stat-val">{avgPerWeek}×</div><div className="stat-lbl">Per week avg</div></div>
+        <div className="stat-box"><div className="stat-val">{currentStreak}</div><div className="stat-lbl">Current streak</div></div>
+        <div className="stat-box"><div className="stat-val">{longestStreak}</div><div className="stat-lbl">Longest streak</div></div>
+      </div>
+      <div className="card" style={{marginBottom:10}}>
+        <div style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.6,marginBottom:12}}>Lifetime volume</div>
+        <div style={{fontSize:32,fontWeight:900,color:'var(--accent)'}}>{totalVolAcc>=1000?`${(totalVolAcc/1000).toFixed(1)}t`:`${Math.round(totalVolAcc)}kg`}</div>
+        <div style={{fontSize:13,color:'var(--muted)',marginTop:4}}>total weight moved across all workouts</div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+        <div className="card">
+          <div style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.6,marginBottom:8}}>Most trained</div>
+          <div style={{fontWeight:700,fontSize:14}}>{mostTrained?.[0]||'—'}</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginTop:2}}>{mostTrained?.[1]||0} times</div>
+        </div>
+        <div className="card">
+          <div style={{fontSize:11,color:'var(--muted)',fontWeight:600,textTransform:'uppercase',letterSpacing:.6,marginBottom:8}}>Favourite day</div>
+          <div style={{fontWeight:700,fontSize:14}}>{favDay}</div>
+          <div style={{fontSize:12,color:'var(--muted)',marginTop:2}}>{dayCounts[dayNames2.indexOf(favDay)]} workouts</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── CalendarTab ───────────────────────────────────────────────────────────────
+function CalendarTab({ workouts, templates, onAddWorkout, onAddFromTemplate, onOpenWorkout, returnToDate }) {
+  const today = new Date();
+  const returnDate = returnToDate ? new Date(returnToDate+'T00:00:00') : null;
+  const [year,  setYear]  = useState(returnDate ? returnDate.getFullYear() : today.getFullYear());
+  const [month, setMonth] = useState(returnDate ? returnDate.getMonth() : today.getMonth());
+
+  const daysInMonth  = new Date(year, month + 1, 0).getDate();
+  const firstDayOfWeek = new Date(year, month, 1).getDay(); // 0=Sun
+  // Adjust so Monday = 0
+  const startOffset = (firstDayOfWeek + 6) % 7;
+
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dayNames   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  // Group workouts by YYYY-MM-DD
+  const byDate = {};
+  workouts.forEach(w => {
+    const d = new Date(w.date);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    if(!byDate[key]) byDate[key] = [];
+    byDate[key].push(w);
+  });
+
+  const [selected,      setSelected]      = useState(returnToDate||null);
+  const [showTplPicker, setShowTplPicker] = useState(false);
+
+  const prevMonth = () => { if(month===0){setMonth(11);setYear(y=>y-1);}else setMonth(m=>m-1); setSelected(null); };
+  const nextMonth = () => { if(month===11){setMonth(0);setYear(y=>y+1);}else setMonth(m=>m+1); setSelected(null); };
+
+  const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  const cells = [];
+  for(let i=0; i<startOffset; i++) cells.push(null);
+  for(let d=1; d<=daysInMonth; d++) cells.push(d);
+
+  const selectedKey = selected;
+  const selectedWorkouts = selectedKey ? (byDate[selectedKey]||[]) : [];
+
+  return (
+    <div>
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20}}>
+        <h2>Calendar</h2>
+        <div style={{display:'flex',alignItems:'center',gap:12}}>
+          <button className="icon-btn" style={{background:'var(--surface3)',borderRadius:10,padding:'8px 12px'}} onClick={prevMonth}>
+            <i className="ti ti-chevron-left" style={{fontSize:16}}></i>
+          </button>
+          <span style={{fontWeight:700,fontSize:15,minWidth:110,textAlign:'center'}}>{monthNames[month]} {year}</span>
+          <button className="icon-btn" style={{background:'var(--surface3)',borderRadius:10,padding:'8px 12px'}} onClick={nextMonth}>
+            <i className="ti ti-chevron-right" style={{fontSize:16}}></i>
+          </button>
+        </div>
+      </div>
+
+      {/* Day headers */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:4,marginBottom:6}}>
+        {dayNames.map(d=>(
+          <div key={d} style={{textAlign:'center',fontSize:11,fontWeight:700,color:'var(--muted)',padding:'4px 0',letterSpacing:.5}}>{d}</div>
+        ))}
+      </div>
+
+      {/* Day cells */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:4,marginBottom:20}}>
+        {cells.map((day, i) => {
+          if(!day) return <div key={`e-${i}`} />;
+          const key = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+          const hasWorkout = !!byDate[key];
+          const count = byDate[key]?.length || 0;
+          const isToday = key === todayKey;
+          const isSel   = key === selectedKey;
+          return (
+            <div key={key} onClick={()=>{ setSelected(isSel?null:key); setShowTplPicker(false); }}
+              style={{
+                aspectRatio:'1',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+                borderRadius:10,cursor:hasWorkout?'pointer':'default',
+                background: isSel ? 'var(--accent)' : isToday ? 'var(--surface3)' : 'transparent',
+                border: isToday && !isSel ? '1.5px solid var(--border)' : '1.5px solid transparent',
+                position:'relative'
+              }}>
+              <span style={{fontSize:14,fontWeight: isToday||isSel?700:400, color: isSel?'#ffffff': isToday?'var(--accent)':'var(--text)'}}>{day}</span>
+              {hasWorkout && (
+                <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:2,marginTop:2}}>
+                  <div style={{display:'flex',gap:2}}>
+                    {(byDate[key]||[]).slice(0,3).map((w,di)=>(
+                      <div key={di} style={{width:4,height:4,borderRadius:'50%',background: isSel?'#ffffff':(colorHex(w.color)||'var(--accent)')}}></div>
+                    ))}
+                  </div>
+                  {count>3 && <span style={{fontSize:8,fontWeight:700,color:isSel?'#ffffff':'var(--accent)',lineHeight:1}}>+</span>}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Selected day workouts */}
+      {selectedKey && (
+        <div>
+          <div className="label" style={{marginBottom:12}}>
+            {new Date(selectedKey+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long'})}
+          </div>
+          {selectedWorkouts.length===0
+            ? <div style={{color:'var(--muted)',fontSize:14,textAlign:'center',padding:'20px 0'}}>No workouts on this day</div>
+            : selectedWorkouts.map((w,i)=>(
+              <div key={i} className="card" style={{marginBottom:10,cursor:'pointer',
+                borderLeft: colorHex(w.color) ? `4px solid ${colorHex(w.color)}` : '1.5px solid var(--border)'
+              }} onClick={()=>onOpenWorkout(w, selectedKey)}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+                  <div>
+                    <h3>{w.name||'Workout'}</h3>
+                    <div style={{color:'var(--muted)',fontSize:13,marginTop:2}}>{fmtTime(w.date)}</div>
+                  </div>
+                  <span style={{fontSize:12,color:'var(--muted)',background:'var(--surface3)',borderRadius:8,padding:'4px 10px',fontWeight:600}}>{w.exercises.length} exercises</span>
+                </div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:6}}>
+                  {w.exercises.slice(0,4).map((ex,ei)=><span key={ei} className="chip" style={{fontSize:12,
+                    background: colorHex(w.color) ? `${colorHex(w.color)}22` : 'rgba(29,78,216,.12)',
+                    color: colorHex(w.color) || 'var(--accent)'
+                  }}>{ex.name}</span>)}
+                  {w.exercises.length>4&&<span style={{fontSize:12,color:colorHex(w.color)||'var(--muted)'}}>+{w.exercises.length-4}</span>}
+                </div>
+              </div>
+            ))
+          }
+          <div style={{display:'flex',flexDirection:'column',gap:8,marginTop:8}}>
+            <button className="btn-primary" style={{display:'flex',alignItems:'center',gap:8,justifyContent:'center'}}
+              onClick={()=>{ onAddWorkout(selectedKey); }}>
+              <i className="ti ti-plus"></i> Add new workout
+            </button>
+            {templates.length>0 && (
+              <>
+                {!showTplPicker
+                  ? <button className="btn-ghost" style={{width:'100%',display:'flex',alignItems:'center',gap:8,justifyContent:'center'}} onClick={()=>setShowTplPicker(true)}>
+                      <i className="ti ti-layout-cards"></i> Add from template
+                    </button>
+                  : <div className="card" style={{padding:12}}>
+                      <div className="label" style={{marginBottom:8}}>Choose template</div>
+                      {templates.map((t,ti)=>(
+                        <div key={ti} style={{padding:'10px 12px',borderRadius:10,cursor:'pointer',background:'var(--surface3)',marginBottom:6,fontWeight:600,fontSize:14}}
+                          onClick={()=>{ onAddFromTemplate(t, selectedKey); setShowTplPicker(false); }}>
+                          {t.name}
+                          <div style={{fontSize:12,color:'var(--muted)',fontWeight:400,marginTop:2}}>{t.exercises.length} exercises</div>
+                        </div>
+                      ))}
+                      <button className="btn-ghost" style={{width:'100%',marginTop:4,padding:'10px',fontSize:13}} onClick={()=>setShowTplPicker(false)}>Cancel</button>
+                    </div>
+                }
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {workouts.length===0 && (
+        <div className="empty"><i className="ti ti-calendar"></i>No workouts yet<br/><small style={{marginTop:8,display:'block'}}>Your training days will appear here</small></div>
+      )}
+    </div>
+  );
+}
+
+
+// ── ExportImport ──────────────────────────────────────────────────────────────
+function ExportImport({ workouts, templates, setWorkouts, setTemplates }) {
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState(null);
+  const [importSuccess, setImportSuccess] = useState(false);
+
+  const handleExport = () => {
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      workouts,
+      templates,
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `gym-log-backup-${new Date().toISOString().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setImportError(null);
+    setImportSuccess(false);
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (!data.workouts || !data.templates) throw new Error('Invalid file format');
+        const mergedWorkouts  = [...workouts,  ...data.workouts.filter(w  => !workouts.find(x  => x.date === w.date && x.name === w.name))];
+        const mergedTemplates = [...templates, ...data.templates.filter(t  => !templates.find(x  => x.name === t.name))];
+        setWorkouts(mergedWorkouts);
+        setTemplates(mergedTemplates);
+        await dbSave('workouts',  mergedWorkouts);
+        await dbSave('templates', mergedTemplates);
+        setImportSuccess(true);
+        setTimeout(() => setImportSuccess(false), 3000);
+      } catch(err) {
+        setImportError('Invalid file. Please use a GYM LOG backup (.json).');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  return (
+    <div>
+      <h2 style={{marginBottom:6}}>Settings</h2>
+      <p style={{color:'var(--muted)',fontSize:13,marginBottom:20,lineHeight:1.5}}>
+        Export your data as a JSON backup file. Import merges data without overwriting existing entries.
+      </p>
+
+      <div className="card" style={{marginBottom:12}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:12}}>
+          <div style={{width:40,height:40,borderRadius:12,background:'rgba(29,78,216,.12)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            <i className="ti ti-download" style={{fontSize:20,color:'var(--accent)'}}></i>
+          </div>
+          <div>
+            <div style={{fontWeight:700,fontSize:15}}>Export backup</div>
+            <div style={{color:'var(--muted)',fontSize:13}}>{workouts.length} workouts · {templates.length} templates</div>
+          </div>
+        </div>
+        <button className="btn-primary" onClick={handleExport}>
+          <i className="ti ti-download"></i> Download JSON backup
+        </button>
+      </div>
+
+      <div className="card">
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:12}}>
+          <div style={{width:40,height:40,borderRadius:12,background:'rgba(91,159,255,.12)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+            <i className="ti ti-upload" style={{fontSize:20,color:'var(--blue)'}}></i>
+          </div>
+          <div>
+            <div style={{fontWeight:700,fontSize:15}}>Import backup</div>
+            <div style={{color:'var(--muted)',fontSize:13}}>Merges with existing data</div>
+          </div>
+        </div>
+        {importError && (
+          <div style={{background:'rgba(255,95,126,.1)',border:'1.5px solid rgba(255,95,126,.25)',borderRadius:10,padding:'10px 12px',fontSize:13,color:'var(--red)',marginBottom:10}}>
+            <i className="ti ti-alert-triangle" style={{marginRight:6}}></i>{importError}
+          </div>
+        )}
+        {importSuccess && (
+          <div style={{background:'rgba(29,78,216,.1)',border:'1.5px solid rgba(29,78,216,.25)',borderRadius:10,padding:'10px 12px',fontSize:13,color:'var(--accent)',marginBottom:10}}>
+            <i className="ti ti-check" style={{marginRight:6}}></i>Data imported successfully!
+          </div>
+        )}
+        <label style={{display:'block',cursor:'pointer'}}>
+          <input type="file" accept=".json" onChange={handleImport} style={{display:'none'}} />
+          <div className="btn-blue" style={{display:'flex',alignItems:'center',gap:8,justifyContent:'center',padding:'14px 20px',borderRadius:12,fontWeight:700,fontSize:15}}>
+            <i className="ti ti-upload"></i> Choose JSON file
+          </div>
+        </label>
+      </div>
+
+      <div style={{marginTop:20,padding:'14px 16px',background:'var(--surface3)',borderRadius:12}}>
+        <div style={{fontSize:12,fontWeight:700,color:'var(--muted)',textTransform:'uppercase',letterSpacing:.6,marginBottom:6}}>Tip</div>
+        <div style={{fontSize:13,color:'var(--muted)',lineHeight:1.5}}>
+          Export regularly to keep a backup. Use Import to transfer data between devices or browsers.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────────────────
+function App() {
+  const [tab,       setTab]       = useState('templates');
+  const [templates, setTemplates] = useState([]);
+  const [workouts,  setWorkouts]  = useState([]);
+  const [loaded,    setLoaded]    = useState(false);
+
+  // All tab states live here — never unmount, never reset on tab switch
+  const [tplState,  setTplState]  = useState({creating:false,name:'',exInput:'',exercises:[],editing:null});
+  const [wktState,  setWktState]  = useState({active:null,note:''});
+  const [histState, setHistState] = useState({detail:null});
+  const [progState, setProgState] = useState({selectedEx:null,metric:'1rm'});
+
+  const [startTemplate,  setStartTemplate]  = useState(null);
+  const [repeatWorkout,  setRepeatWorkout]  = useState(null);
+  const [calendarReturn, setCalendarReturn] = useState(null); // dateKey to return to
+
+  // Load both stores from IndexedDB on first render
+  useEffect(()=>{
+    (async()=>{
+      const [t,w] = await Promise.all([dbLoad('templates'), dbLoad('workouts')]);
+      // Normalize exercise names on load
+      const normW = w.map(workout => ({...workout, exercises: workout.exercises.map(ex => ({...ex, name: toSentenceCase(ex.name)}))}));
+      const normT = t.map(tpl => ({...tpl, exercises: tpl.exercises.map(n => toSentenceCase(n))}));
+      setTemplates(normT);
+      setWorkouts(normW);
+      // Persist normalized data back
+      await Promise.all([dbSave('templates', normT), dbSave('workouts', normW)]);
+      setLoaded(true);
+    })();
+  },[]);
+
+  if(!loaded) return (
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'50vh',flexDirection:'column',gap:16}}>
+      <div style={{width:48,height:48,border:'3px solid var(--border)',borderTopColor:'var(--accent)',borderRadius:'50%',animation:'spin 1s linear infinite'}}></div>
+      <span style={{color:'var(--muted)'}}>Loading...</span>
+    </div>
+  );
+
+  const tabs=[['templates','ti-layout-cards','Templates'],['workout','ti-barbell','Workout'],['history','ti-history','History'],['progress','ti-chart-line','Progress'],['calendar','ti-calendar','Calendar'],['data','ti-settings','Settings']];
+
+  return (
+    <div style={{maxWidth:420,margin:'0 auto',padding:'20px 16px 32px'}}>
+      <div style={{textAlign:'center',marginBottom:24}}>
+        <span style={{fontSize:26,fontWeight:900,letterSpacing:'-1px',color:'var(--accent)'}}>GYM</span>
+        <span style={{fontSize:26,fontWeight:300,color:'var(--muted)',marginLeft:8}}>LOG</span>
+      </div>
+      <div className="tab-bar">
+        {tabs.map(([key,icon,label])=>(
+          <button key={key} className={`tab${tab===key?' active':''}`} onClick={()=>{ setTab(key); if(key!=='progress') setProgState(s=>({...s,progressView:'exercise'})); }}>
+            <i className={`ti ${icon}`} style={{fontSize:14,display:'block',marginBottom:2}}></i>{label}
+          </button>
+        ))}
+      </div>
+
+      {/* All tabs stay mounted — only visibility toggles — preserving state */}
+      <div style={{display:tab==='templates'?'block':'none'}}>
+        <TemplatesTab templates={templates} setTemplates={setTemplates}
+          onStartWorkout={t=>{setStartTemplate(t);setTab('workout');}}
+          tplState={tplState} setTplState={setTplState} />
+      </div>
+      <div style={{display:tab==='workout'?'block':'none'}}>
+        <WorkoutTab workouts={workouts} setWorkouts={setWorkouts} templates={templates}
+          wktState={wktState} setWktState={setWktState}
+          onDiscardFromTemplate={()=>setTab('templates')}
+          startTemplate={startTemplate} repeatWorkout={repeatWorkout}
+          onClearTemplate={()=>setStartTemplate(null)} onClearRepeat={()=>setRepeatWorkout(null)} />
+      </div>
+      <div style={{display:tab==='history'?'block':'none'}}>
+        <HistoryTab workouts={workouts} setWorkouts={setWorkouts}
+          templates={templates} setTemplates={setTemplates}
+          histState={histState} setHistState={setHistState}
+          onRepeatWorkout={w=>setRepeatWorkout(w)} setTab={setTab}
+          calendarReturn={calendarReturn} onClearCalendarReturn={()=>setCalendarReturn(null)} />
+      </div>
+      <div style={{display:tab==='progress'?'block':'none'}}>
+        <ProgressTab workouts={workouts} progState={progState} setProgState={setProgState} />
+      </div>
+      <div style={{display:tab==='calendar'?'block':'none'}}>
+        <CalendarTab workouts={workouts} templates={templates}
+          returnToDate={calendarReturn}
+          onOpenWorkout={(w, dateKey)=>{
+            setHistState(s=>({...s,detail:[...workouts].reverse().indexOf(w)}));
+            setCalendarReturn(dateKey);
+            setTab('history');
+          }}
+          onAddWorkout={(dateKey)=>{
+            setWktState({active:{name:'',exercises:[],dateOverride:dateKey,timeOverride:'',startTime:new Date().toISOString()},note:''});
+            setTab('workout');
+          }}
+          onAddFromTemplate={(tpl, dateKey)=>{
+            setStartTemplate({...tpl, _dateOverride: dateKey});
+            setTab('workout');
+          }}
+        />
+      </div>
+      <div style={{display:tab==='data'?'block':'none'}}>
+        <ExportImport workouts={workouts} templates={templates} setWorkouts={setWorkouts} setTemplates={setTemplates} />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
